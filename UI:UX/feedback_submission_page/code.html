@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fintech Score Engine - Feedback Submission</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f0fbd",
+                        "primary-hover": "#0a0a8b",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101022",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a1a2e",
+                        "text-main": "#0d0d1b",
+                        "text-secondary": "#4c4c9a",
+                        "border-color": "#e7e7f3",
+                        "input-bg": "#f8f8fc",
+                        "accent-success": "#10b981",
+                        "accent-success-light": "#d1fae5",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(15, 15, 189, 0.05)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ccc; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b3b3b3; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased min-h-screen flex flex-col overflow-x-hidden">
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-border-color bg-surface-light dark:bg-surface-dark/90 backdrop-blur-md px-10 py-3 transition-colors">
+<div class="flex items-center gap-4 text-text-main dark:text-white">
+<div class="size-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">token</span>
+</div>
+<h2 class="text-text-main dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Fintech Score Engine</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="hidden md:flex items-center gap-9">
+<a class="text-text-main dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-text-main dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Onboarding</a>
+<a class="text-text-main dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Documentation</a>
+<a class="text-primary text-sm font-bold leading-normal" href="#">Operations</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full size-10 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-text-secondary">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-white shadow-sm" data-alt="User profile avatar with a professional gradient background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChbuDPMWKXZdpZzwMvRLZKmq7lIhjrL_y-UyfIvJI18JuZ9LRCYnYJZloJQLCt8e363TfB657ju80xzp8YzkoQw9MBVFniWHfgKUtFi3YI-A9xN4ofIZzG9KPZRr5AhOcVj8GUGCpJ1PJ38cnaCpTFbpI7JenCzxDk5HJQ6o4ktauupkU7EG9IBScFHLwDjtv-57WIndcDVc7iTmSSBT9xlBOZ0wPJFUr1MJVWwUGPVnpWY1UKUyKs4pKcRwqJnx4n-DBdz-ibw8Y");'></div>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center py-12 px-4 sm:px-10 lg:px-40 w-full max-w-[1440px] mx-auto">
+<div class="w-full max-w-[640px] flex flex-col gap-6">
+<nav aria-label="Breadcrumb" class="flex flex-wrap gap-2 px-1">
+<a class="text-text-secondary hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Home</a>
+<span class="text-text-secondary text-sm font-medium leading-normal">/</span>
+<a class="text-text-secondary hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Operations</a>
+<span class="text-text-secondary text-sm font-medium leading-normal">/</span>
+<span class="text-text-main dark:text-white text-sm font-medium leading-normal">Feedback</span>
+</nav>
+<div class="flex flex-col gap-2">
+<h1 class="text-text-main dark:text-white tracking-tight text-[32px] font-bold leading-tight">Submit Feedback</h1>
+<p class="text-text-secondary text-base font-normal leading-normal">
+                    Submit a loan outcome for model retraining via <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono text-primary">POST /feedback</code>.
+                </p>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-soft border border-border-color dark:border-gray-800 overflow-hidden mt-4">
+<form class="p-8 flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-text-main dark:text-white text-sm font-bold">Application ID</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary group-focus-within:text-primary transition-colors">badge</span>
+</div>
+<input class="w-full rounded-lg border border-[#cfcfe7] bg-input-bg dark:bg-gray-900/50 dark:border-gray-700 dark:text-white h-12 pl-12 pr-4 text-base placeholder:text-text-secondary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="e.g. APP-2023-XXXX" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-text-main dark:text-white text-sm font-bold">Outcome Label</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary group-focus-within:text-primary transition-colors">fact_check</span>
+</div>
+<select class="w-full rounded-lg border border-[#cfcfe7] bg-input-bg dark:bg-gray-900/50 dark:border-gray-700 dark:text-white h-12 pl-12 pr-10 text-base text-text-main focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAixZr-zD6B3G_WnOla4SELImeKDGYFTWWdFpuiEAJh4T78agGQVyBhmmza8JLrRIgh-wokZ4jYIItqoLfhFVBQSlmeqeJ9Oo1auZx1Yh-KYJQO16-nyXDY5uEeQl2frcjzCWdIf9rWbpDDDDF_IMXKlBjxiDev2yfNJb5fxLC8g-o7DNZhhl77839x_0nrvq9JXkTXHqWyS7rxu-i7Cn1cOYYOe2RIpEGn5XkfvbKrPmBBClSjpWipIxZJz-DtTGv0JTI9EDyGGMs'); background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.25rem;">
+<option disabled="" selected="" value="">Select outcome...</option>
+<option value="repaid">Repaid in Full</option>
+<option value="default">Defaulted</option>
+<option value="partially_recovered">Partially Recovered</option>
+<option value="written_off">Written Off</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-text-main dark:text-white text-sm font-bold">Outcome Date</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary group-focus-within:text-primary transition-colors">calendar_today</span>
+</div>
+<input class="w-full rounded-lg border border-[#cfcfe7] bg-input-bg dark:bg-gray-900/50 dark:border-gray-700 dark:text-white h-12 pl-12 pr-4 text-base text-text-main placeholder:text-text-secondary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer" type="date"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-text-main dark:text-white text-sm font-bold">Optional Notes</label>
+<div class="relative group">
+<div class="absolute top-3 left-0 pl-4 flex items-start pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary group-focus-within:text-primary transition-colors">description</span>
+</div>
+<textarea class="w-full rounded-lg border border-[#cfcfe7] bg-input-bg dark:bg-gray-900/50 dark:border-gray-700 dark:text-white min-h-[120px] pl-12 pr-4 py-3 text-base placeholder:text-text-secondary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y" placeholder="Add any relevant details about this loan outcome..."></textarea>
+</div>
+</div>
+<div class="pt-2">
+<button class="w-full bg-primary hover:bg-primary-hover text-white font-semibold text-base py-3 rounded-lg shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-colors" type="button">
+<span>Submit Feedback</span>
+</button>
+</div>
+</form>
+</div>
+<div class="p-4 rounded-lg bg-emerald-50 border border-emerald-200 dark:bg-emerald-900/20 dark:border-emerald-800 flex items-start gap-3">
+<span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 mt-0.5">wifi_tethering</span>
+<div class="flex flex-col gap-1">
+<p class="text-sm font-bold text-emerald-900 dark:text-emerald-100">Feedback Service Online</p>
+<p class="text-sm text-emerald-800 dark:text-emerald-200/80">
+                        Ready to process POST requests. Responses will return a static 201 confirmation.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>
