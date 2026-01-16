@@ -1,0 +1,5 @@
+{
+  "name": "LoanDecisionAgent",
+  "description": "An API-first loan scoring and decision engine for fintech developers. Features include real-time scoring, batch processing, vendor management, and audit logging.",
+  "requestFramePermissions": []
+}
