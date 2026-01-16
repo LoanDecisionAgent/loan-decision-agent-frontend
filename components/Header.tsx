@@ -2,7 +2,8 @@
 "use client";
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { User } from '../types';
 
 interface HeaderProps {
@@ -13,7 +14,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleDarkMode, onMenuClick, isDarkMode }) => {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
 
   const getPageConfig = () => {
     const configs: Record<string, string> = {
@@ -49,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, onMenuClick, isDarkMode
             {getPageConfig()}
           </h2>
           <nav className="hidden sm:flex items-center gap-1.5 text-[10px] text-slate-400 uppercase font-black tracking-widest">
-             <Link to="/dashboard" className="hover:text-indigo-600 transition-colors">Portal</Link>
+             <Link href="/dashboard" className="hover:text-indigo-600 transition-colors">Portal</Link>
              {breadcrumbs.length > 0 && <span>/</span>}
              {breadcrumbs.join(' / ')}
           </nav>

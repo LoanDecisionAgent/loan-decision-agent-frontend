@@ -1,6 +1,8 @@
 
+"use client";
+
 import React, { useState } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { User } from '../types';
@@ -14,8 +16,12 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ user, onLogout, toggleDarkMode, isDarkMode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    router.push('/login');
+    return null;
+  }
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
@@ -44,7 +50,7 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, toggleDarkMode, isDarkM
           isDarkMode={isDarkMode}
         />
         <div className="flex-1 overflow-y-auto custom-scrollbar">
-          <Outlet />
+          {/* Children would go here in App Router */}
         </div>
       </main>
     </div>

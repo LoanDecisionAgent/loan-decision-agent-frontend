@@ -1,4 +1,4 @@
-# Stage 1: Build the React application
+# Stage 1: Build the Next.js application
 FROM node:18-alpine AS build
 
 # Set the working directory
@@ -20,7 +20,7 @@ RUN npm run build
 FROM nginx:1.25-alpine
 
 # Copy the build output from the build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/.next /usr/share/nginx/html
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf

@@ -2,7 +2,7 @@
 "use client";
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const features = [
   { title: 'Sub-100ms Scoring', icon: 'bolt', desc: 'Real-time decisioning for synchronous user flows.' },
@@ -25,8 +25,8 @@ export default function LandingPage() {
             <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">LoanDecision</span>
           </div>
           <div className="flex items-center gap-8">
-            <Link to="/docs" className="hidden md:block text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors">Documentation</Link>
-            <Link to="/login" className="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-6 py-2.5 rounded-xl text-sm font-black hover:scale-105 transition-all">
+            <Link href="/docs" className="hidden md:block text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors">Documentation</Link>
+            <Link href="/login" className="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-6 py-2.5 rounded-xl text-sm font-black hover:scale-105 transition-all">
               Launch App
             </Link>
           </div>
@@ -43,11 +43,11 @@ export default function LandingPage() {
               The lightweight alternative to enterprise scoring engines. Built for modern fintech developers who value speed, auditability, and ease of integration.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/signup" className="bg-indigo-600 text-white h-14 px-10 rounded-2xl font-black text-lg flex items-center gap-2 shadow-2xl shadow-indigo-600/30 hover:bg-indigo-700 transition-all">
+              <Link href="/signup" className="bg-indigo-600 text-white h-14 px-10 rounded-2xl font-black text-lg flex items-center gap-2 shadow-2xl shadow-indigo-600/30 hover:bg-indigo-700 transition-all">
                 Get Started Free
                 <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
-              <Link to="/support" className="border border-slate-200 dark:border-slate-800 h-14 px-10 rounded-2xl font-black text-lg flex items-center hover:bg-slate-50 dark:hover:bg-slate-900 transition-all">
+              <Link href="/support" className="border border-slate-200 dark:border-slate-800 h-14 px-10 rounded-2xl font-black text-lg flex items-center hover:bg-slate-50 dark:hover:bg-slate-900 transition-all">
                 Talk to Sales
               </Link>
             </div>
@@ -80,10 +80,10 @@ export default function LandingPage() {
               <p className="text-sm text-slate-500">© {currentYear} Fintech Core Engine. All rights reserved.</p>
             </div>
             <nav className="flex gap-10 text-xs font-black uppercase tracking-[0.2em] text-slate-400">
-              <Link to="/privacy" className="hover:text-indigo-600 transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-indigo-600 transition-colors">Terms</Link>
-              <Link to="/support" className="hover:text-indigo-600 transition-colors">Support</Link>
-              <Link to="/docs" className="hover:text-indigo-600 transition-colors">API Docs</Link>
+              <Link href="/privacy" className="hover:text-indigo-600 transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-indigo-600 transition-colors">Terms</Link>
+              <Link href="/support" className="hover:text-indigo-600 transition-colors">Support</Link>
+              <Link href="/docs" className="hover:text-indigo-600 transition-colors">API Docs</Link>
             </nav>
           </div>
         </div>

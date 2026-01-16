@@ -19,9 +19,9 @@ This is the frontend for the LoanDecisionAgent application.
     ```bash
     npm install
     ```
-2.  Create a `.env` file and set the `VITE_API_BASE_URL` to your backend API URL.
+2.  Create a `.env` file and set the `NEXT_PUBLIC_API_BASE_URL` to your backend API URL.
     ```
-    VITE_API_BASE_URL=http://localhost:8000/api
+    NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
     ```
 3.  Run the app:
     ```bash
