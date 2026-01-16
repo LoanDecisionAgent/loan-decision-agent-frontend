@@ -43,12 +43,12 @@ export default function LandingPage() {
               The lightweight alternative to enterprise scoring engines. Built for modern fintech developers who value speed, auditability, and ease of integration.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/signup" className="bg-indigo-600 text-white h-14 px-10 rounded-2xl font-black text-lg flex items-center gap-2 shadow-2xl shadow-indigo-600/30 hover:bg-indigo-700 transition-all">
-                Get Started Free
+              <Link href="/score" className="bg-indigo-600 text-white h-14 px-10 rounded-2xl font-black text-lg flex items-center gap-2 shadow-2xl shadow-indigo-600/30 hover:bg-indigo-700 transition-all">
+                Get Started
                 <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
-              <Link href="/support" className="border border-slate-200 dark:border-slate-800 h-14 px-10 rounded-2xl font-black text-lg flex items-center hover:bg-slate-50 dark:hover:bg-slate-900 transition-all">
-                Talk to Sales
+              <Link href="/login" className="border border-slate-200 dark:border-slate-800 h-14 px-10 rounded-2xl font-black text-lg flex items-center hover:bg-slate-50 dark:hover:bg-slate-900 transition-all">
+                Dashboard
               </Link>
             </div>
           </div>

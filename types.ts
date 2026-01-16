@@ -45,40 +45,23 @@ export interface AuditLog {
 }
 
 export interface ScoreRequest {
+  age: number;
   income: number;
-  requested_amount: number;
-  term_months: number;
-  interest_rate: number;
-}
-
-export interface Reason {
-  feature: string;
-  impact: number;
-}
-
-export interface Affordability {
-  monthly_payment: number;
-  max_loan_amount: number;
-}
-
-export interface Scorecard {
-  trust_score: number;
-  default_probability: number;
-  affordability: Affordability;
-  anomaly_flag: boolean;
-  decision: string;
-  reasons: Reason[];
-}
-
-export interface Audit {
-  model_version: string;
-  timestamp: string;
+  loanamount: number;
+  interestrate: number;
+  loanterm: number;
+  dtiratio: number;
+  employmenttype: string;
+  maritalstatus: string;
+  loanpurpose: string;
+  hasdependents: number;
 }
 
 export interface ScoreResponse {
-  app_id: string;
-  scorecard: Scorecard;
-  audit: Audit;
+  default_probability: number;
+  risk_band: string;
+  model_decision: string;
+  top_factors: string[];
 }
 
 export interface ApiError {

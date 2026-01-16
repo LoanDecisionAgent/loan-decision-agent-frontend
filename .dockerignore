@@ -4,9 +4,13 @@ node_modules
 # build artifacts
 dist
 build
+.next
+out
 
 # misc
 .env
+.env.local
+.env.*.local
 .DS_Store
 *.log
 npm-debug.log*
@@ -18,3 +22,12 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# testing
+coverage
+.nyc_output
+
+# git
+.git
+.gitignore
+README.md

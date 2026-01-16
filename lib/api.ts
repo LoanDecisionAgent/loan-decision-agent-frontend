@@ -1,6 +1,9 @@
 import { ScoreRequest, ScoreResponse, ApiError } from '../types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
+// Get API base URL from environment variable
+// For Next.js, we use NEXT_PUBLIC_API_BASE_URL (not VITE_API_BASE_URL)
+// This allows the frontend to be configured without hardcoded URLs
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://backend:3001';
 
 export class ApiClientError extends Error {
   public code: string;
@@ -13,7 +16,11 @@ export class ApiClientError extends Error {
 }
 
 async function apiCall<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
+  // Ensure endpoint starts with / if API_BASE_URL doesn't end with /
+  const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+  const endpointPath = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = `${baseUrl}${endpointPath}`;
+  
   const config: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
@@ -32,7 +39,7 @@ async function apiCall<T>(endpoint: string, options: RequestInit = {}): Promise<
       } catch {
         errorData = { code: 'UNKNOWN_ERROR', message: `HTTP ${response.status}: ${response.statusText}` };
       }
-      throw new ApiClientError(errorData.code, errorData.message);
+      throw new ApiClientError(errorData.code || 'HTTP_ERROR', errorData.message || `HTTP ${response.status}: ${response.statusText}`);
     }
 
     const data: T = await response.json();
@@ -47,12 +54,8 @@ async function apiCall<T>(endpoint: string, options: RequestInit = {}): Promise<
 }
 
 export async function scoreLoan(request: ScoreRequest): Promise<ScoreResponse> {
-  return apiCall<ScoreResponse>('/score', {
+  return apiCall<ScoreResponse>('/api/score', {
     method: 'POST',
     body: JSON.stringify(request),
   });
 }
-
-// For loading states, the caller can use React state or hooks like useState for loading.
-// Example: const [loading, setLoading] = useState(false);
-// Then: setLoading(true); scoreLoan(request).then(setLoading(false)).catch(handleError);
