@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import AiInsights from '../components/AiInsights';
 
 const JobDetails: React.FC = () => {
   const { jobId } = useParams();
@@ -62,8 +61,6 @@ const JobDetails: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <AiInsights jobData={jobSummary} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[

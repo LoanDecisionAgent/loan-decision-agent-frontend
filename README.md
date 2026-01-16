@@ -2,19 +2,42 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# LoanDecisionAgent Frontend
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1rY70NoHd7XZgb18sxxHoY5CYawojVHRi
+This is the frontend for the LoanDecisionAgent application.
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
+**Prerequisites:**
 
+*   Node.js (v18 or higher)
+*   npm
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+**Setup:**
+
+1.  Install dependencies:
+    ```bash
+    npm install
+    ```
+2.  Create a `.env` file and set the `VITE_API_BASE_URL` to your backend API URL.
+    ```
+    VITE_API_BASE_URL=http://localhost:8000/api
+    ```
+3.  Run the app:
+    ```bash
+    npm run dev
+    ```
+
+## Run with Docker
+
+You can also run the frontend in a Docker container.
+
+1.  Build the Docker image:
+    ```bash
+    docker build -t loan-frontend .
+    ```
+2.  Run the Docker container:
+    ```bash
+    docker run -p 3000:80 loan-frontend
+    ```
+The application will be available at `http://localhost:3000`.

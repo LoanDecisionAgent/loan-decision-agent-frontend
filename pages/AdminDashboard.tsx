@@ -25,7 +25,7 @@ const AdminDashboard: React.FC = () => {
             { title: 'Manage API Keys', icon: 'key', desc: 'Revoke or issue vendor tokens', path: '/api-keys' },
             { title: 'View Audit Logs', icon: 'history', desc: 'Review all system activity', path: '/audit-logs' },
           ].map(action => (
-            <Link key={action.title} to={action.path} className="group flex items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-xl transition-all text-left">
+            <Link key={action.title} to={action.path} className="group flex items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-xl transition-all text-left transform hover:scale-105 hover:-translate-y-1">
               <div className="flex items-center gap-4">
                 <div className={`flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-indigo-600 group-hover:text-white transition-all`}>
                   <span className="material-symbols-outlined text-[24px]">{action.icon}</span>

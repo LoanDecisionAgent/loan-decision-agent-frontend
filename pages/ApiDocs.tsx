@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 const ApiDocs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'curl' | 'python' | 'nodejs'>('curl');
+  const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/score`;
 
   return (
     <div className="flex flex-1 overflow-hidden relative h-full">
@@ -88,15 +89,15 @@ const ApiDocs: React.FC = () => {
           </section>
 
           <section className="scroll-mt-24">
-            <div className="flex flex-col gap-4 mb-8">
-              <div className="flex items-center gap-3">
-                <span className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-[10px] font-black font-mono tracking-widest">POST</span>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-mono tracking-tight">/v1/score/calculate</h2>
-              </div>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-base">
-                Calculate the credit score for a given applicant. This endpoint accepts a payload containing personal information, income data, and loan request details.
-              </p>
-            </div>
+                      <div className="flex flex-col gap-4 mb-8">
+                        <div className="flex items-center gap-3">
+                          <span className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-[10px] font-black font-mono tracking-widest">POST</span>
+                          <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-mono tracking-tight">/api/score</h2>
+                        </div>
+                        <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-base">
+                          Calculate the loan default probability and provide a risk assessment. This endpoint accepts a payload with applicant and loan details.
+                        </p>
+                      </div>
             <h3 className="text-lg font-black text-slate-900 dark:text-white mb-6">Body Parameters</h3>
             <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
               <table className="w-full text-left border-collapse">
@@ -109,9 +110,16 @@ const ApiDocs: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {[
-                    { name: 'applicant_id', type: 'string', desc: 'Unique identifier for the applicant.', req: true },
-                    { name: 'annual_income', type: 'integer', desc: 'Total annual income in USD cents.', req: true },
-                    { name: 'employment_status', type: 'enum', desc: 'One of: full_time, part_time, self_employed.', req: false },
+                    { name: 'age', type: 'integer', desc: 'Age of the applicant.', req: true },
+                    { name: 'income', type: 'number', desc: 'Monthly income.', req: true },
+                    { name: 'loanamount', type: 'number', desc: 'Requested loan amount.', req: true },
+                    { name: 'interestrate', type: 'number', desc: 'Interest rate for the loan.', req: true },
+                    { name: 'loanterm', type: 'integer', desc: 'Loan term in months.', req: true },
+                    { name: 'dtiratio', type: 'number', desc: 'Debt-to-income ratio.', req: true },
+                    { name: 'employmenttype', type: 'enum', desc: 'Type of employment (e.g., Salaried, Self-Employed).', req: true },
+                    { name: 'maritalstatus', type: 'enum', desc: 'Marital status (e.g., Single, Married).', req: true },
+                    { name: 'loanpurpose', type: 'enum', desc: 'Purpose of the loan (e.g., Education, Home).', req: true },
+                    { name: 'hasdependents', type: 'integer', desc: 'Number of dependents.', req: true },
                   ].map(param => (
                     <tr key={param.name} className="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                       <td className="px-6 py-5 font-mono text-sm text-indigo-600 font-bold">
@@ -154,7 +162,7 @@ const ApiDocs: React.FC = () => {
           </div>
           <pre className="text-slate-300 whitespace-pre overflow-x-auto">
             <code className="block">
-{activeTab === 'curl' ? `curl -X POST https://api.loanengine.io/v1/score/calculate \\
+{activeTab === 'curl' ? `curl -X POST ${API_URL} \\
   -H "Authorization: Bearer pk_live_8f9s8d..." \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -164,7 +172,7 @@ const ApiDocs: React.FC = () => {
     "loan_amount": 2500000
 }'` : activeTab === 'python' ? `import requests
 
-url = "https://api.loanengine.io/v1/score/calculate"
+url = "${API_URL}"
 headers = {
     "Authorization": "Bearer pk_live_...",
     "Content-Type": "application/json"
@@ -177,7 +185,7 @@ data = {
 response = requests.post(url, headers=headers, json=data)
 print(response.json())` : `const axios = require('axios');
 
-const res = await axios.post('https://api.loanengine.io/v1/score/calculate', {
+const res = await axios.post(API_URL, {
   applicant_id: 'app_923842',
   annual_income: 8500000,
   employment_status: 'full_time'

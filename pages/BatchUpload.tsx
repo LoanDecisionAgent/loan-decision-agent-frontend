@@ -3,6 +3,43 @@ import React, { useState } from 'react';
 
 const BatchUpload: React.FC = () => {
   const [mappingId, setMappingId] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [recentBatches, setRecentBatches] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    const fetchRecentBatches = async () => {
+      setLoading(true);
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        const mockData = [
+          { id: '8820-BETA', status: 'check_circle', statusColor: 'emerald', time: '2 hrs ago', count: '500' },
+          { id: '8819-ALPHA', status: 'error', statusColor: 'red', time: '5 hrs ago', count: 'Mapping Error' },
+          { id: '8818-PROD', status: 'check_circle', statusColor: 'emerald', time: 'Yesterday', count: '1,200' },
+        ];
+
+        setRecentBatches(mockData);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch recent batches.');
+        setRecentBatches([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentBatches();
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log("Submitting batch...");
+    // Here you would typically use FormData to handle the file upload
+    // and make a POST request to your backend.
+  };
+
   
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 flex flex-col gap-10">
@@ -26,7 +63,7 @@ const BatchUpload: React.FC = () => {
               <span className="material-symbols-outlined text-indigo-600">post_add</span>
               New Batch Submission
             </h3>
-            <form className="space-y-8">
+            <form className="space-y-8" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2.5">Mapping ID</label>
                 <div className="relative">
@@ -36,6 +73,7 @@ const BatchUpload: React.FC = () => {
                     type="text"
                     value={mappingId}
                     onChange={(e) => setMappingId(e.target.value)}
+                    required
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
                     <span className="material-symbols-outlined text-xl cursor-help">info</span>
@@ -50,13 +88,14 @@ const BatchUpload: React.FC = () => {
                     accept=".csv" 
                     className="block w-full text-sm text-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer bg-slate-50 dark:bg-slate-950 dark:text-slate-400 focus:outline-none file:mr-4 file:py-3.5 file:px-6 file:border-0 file:text-sm file:font-black file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 h-14" 
                     type="file"
+                    required
                   />
                 </div>
                 <p className="mt-3 text-xs text-slate-400 font-medium">Supported format: .csv (Max 50MB)</p>
               </div>
 
               <div className="pt-4">
-                <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black px-8 py-3.5 rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2" type="button">
+                <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black px-8 py-3.5 rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2" type="submit">
                   <span>Submit Batch</span>
                   <span className="material-symbols-outlined">send</span>
                 </button>
@@ -72,22 +111,24 @@ const BatchUpload: React.FC = () => {
               <a className="text-xs text-indigo-600 font-bold hover:underline" href="#">View All</a>
             </div>
             <div className="divide-y divide-slate-100 dark:divide-slate-800">
-              {[
-                { id: '8820-BETA', status: 'check_circle', statusColor: 'emerald', time: '2 hrs ago', count: '500' },
-                { id: '8819-ALPHA', status: 'error', statusColor: 'red', time: '5 hrs ago', count: 'Mapping Error' },
-                { id: '8818-PROD', status: 'check_circle', statusColor: 'emerald', time: 'Yesterday', count: '1,200' },
-              ].map(batch => (
-                <div key={batch.id} className="p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group cursor-pointer">
-                  <div className="flex justify-between items-start mb-1.5">
-                    <span className="text-sm font-bold text-slate-900 dark:text-white font-mono group-hover:text-indigo-600">#JOB-{batch.id}</span>
-                    <span className={`text-${batch.statusColor}-500 material-symbols-outlined text-lg`}>{batch.status}</span>
+              {loading ? (
+                <div className="p-8 text-center text-slate-500">Loading...</div>
+              ) : error ? (
+                <div className="p-8 text-center text-red-500">{error}</div>
+              ) : (
+                recentBatches.map(batch => (
+                  <div key={batch.id} className="p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group cursor-pointer">
+                    <div className="flex justify-between items-start mb-1.5">
+                      <span className="text-sm font-bold text-slate-900 dark:text-white font-mono group-hover:text-indigo-600">#JOB-{batch.id}</span>
+                      <span className={`text-${batch.statusColor}-500 material-symbols-outlined text-lg`}>{batch.status}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs text-slate-400 font-medium">
+                      <span>{batch.time}</span>
+                      <span className={batch.statusColor === 'red' ? 'text-red-500 font-bold' : ''}>{batch.count} Records</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center text-xs text-slate-400 font-medium">
-                    <span>{batch.time}</span>
-                    <span className={batch.statusColor === 'red' ? 'text-red-500 font-bold' : ''}>{batch.count} Records</span>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
