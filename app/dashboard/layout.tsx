@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUser } from '../layout';
+import { useUser } from '../../lib/user-context';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 

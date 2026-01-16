@@ -2,7 +2,7 @@
 "use client";
 
 import React from 'react';
-import { useUser } from '../layout';
+import { useUser } from '../../lib/user-context';
 import { UserRole } from '../../types';
 import VendorDashboard from '../../components/VendorDashboard';
 import AdminDashboard from '../../components/AdminDashboard';

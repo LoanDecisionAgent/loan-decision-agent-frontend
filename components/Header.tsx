@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, onMenuClick, isDarkMode
       '/feedback': 'Model Feedback',
       '/docs': 'Documentation',
     };
-    return configs[pathname] || 'Dashboard';
+    return configs[pathname || ''] || 'Dashboard';
   };
 
   const breadcrumbs = (pathname || '')

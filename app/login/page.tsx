@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useUser } from '../layout';
+import { useUser } from '../../lib/user-context';
 import { UserRole } from '../../types';
 
 export default function LoginPage() {
