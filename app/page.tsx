@@ -25,7 +25,8 @@ export default function LandingPage() {
             <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">LoanDecision</span>
           </div>
           <div className="flex items-center gap-8">
-            <Link href="/docs" className="hidden md:block text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors">Documentation</Link>
+            <Link href="/docs" className="hidden md:block text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors hover:underline">API Docs</Link>
+            <Link href="/contact" className="hidden md:block text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors hover:underline">Contact</Link>
             <Link href="/login" className="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-6 py-2.5 rounded-xl text-sm font-black hover:scale-105 transition-all">
               Launch App
             </Link>
@@ -35,31 +36,31 @@ export default function LandingPage() {
 
       <main className="flex-grow pt-24 pb-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl mb-32">
-            <h1 className="text-6xl md:text-8xl font-black tracking-tight text-slate-900 dark:text-white mb-8 leading-[0.9]">
-              Decisions <span className="text-indigo-600">at scale.</span>
+          <div className="max-w-3xl mb-32 animate-fade-in">
+            <h1 className="text-6xl md:text-8xl font-black tracking-tight text-slate-900 dark:text-white mb-8 leading-[0.9] animate-slide-in-left">
+              Decisions <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">at scale.</span>
             </h1>
-            <p className="text-2xl text-slate-500 dark:text-slate-400 leading-relaxed mb-12">
+            <p className="text-2xl text-slate-500 dark:text-slate-400 leading-relaxed mb-12 animate-slide-in-right">
               The lightweight alternative to enterprise scoring engines. Built for modern fintech developers who value speed, auditability, and ease of integration.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/score" className="bg-indigo-600 text-white h-14 px-10 rounded-2xl font-black text-lg flex items-center gap-2 shadow-2xl shadow-indigo-600/30 hover:bg-indigo-700 transition-all">
+            <div className="flex flex-wrap gap-4 animate-scale-in">
+              <Link href="/score" className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white h-14 px-10 rounded-2xl font-black text-lg flex items-center gap-2 shadow-2xl shadow-indigo-600/30 hover:shadow-indigo-600/50 hover:scale-105 active:scale-100 transition-all hover-lift">
                 Get Started
                 <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
-              <Link href="/login" className="border border-slate-200 dark:border-slate-800 h-14 px-10 rounded-2xl font-black text-lg flex items-center hover:bg-slate-50 dark:hover:bg-slate-900 transition-all">
+              <Link href="/login" className="border-2 border-slate-200 dark:border-slate-800 h-14 px-10 rounded-2xl font-black text-lg flex items-center hover:bg-slate-50 dark:hover:bg-slate-900 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all hover-lift">
                 Dashboard
               </Link>
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 border-t border-slate-100 dark:border-slate-800 pt-20">
-            {features.map(f => (
-              <div key={f.title} className="group">
-                <div className="mb-6 h-12 w-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                  <span className="material-symbols-outlined">{f.icon}</span>
+            {features.map((f, index) => (
+              <div key={f.title} className="group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="mb-6 h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white transition-all shadow-lg group-hover:shadow-xl group-hover:scale-110">
+                  <span className="material-symbols-outlined text-[28px]">{f.icon}</span>
                 </div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3">{f.title}</h3>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{f.title}</h3>
                 <p className="text-slate-500 dark:text-slate-400 leading-relaxed text-sm">
                   {f.desc}
                 </p>
@@ -80,10 +81,11 @@ export default function LandingPage() {
               <p className="text-sm text-slate-500">© {currentYear} Fintech Core Engine. All rights reserved.</p>
             </div>
             <nav className="flex gap-10 text-xs font-black uppercase tracking-[0.2em] text-slate-400">
-              <Link href="/privacy" className="hover:text-indigo-600 transition-colors">Privacy</Link>
-              <Link href="/terms" className="hover:text-indigo-600 transition-colors">Terms</Link>
-              <Link href="/support" className="hover:text-indigo-600 transition-colors">Support</Link>
-              <Link href="/docs" className="hover:text-indigo-600 transition-colors">API Docs</Link>
+              <Link href="/privacy" className="hover:text-indigo-600 transition-colors hover:underline">Privacy</Link>
+              <Link href="/terms" className="hover:text-indigo-600 transition-colors hover:underline">Terms</Link>
+              <Link href="/support" className="hover:text-indigo-600 transition-colors hover:underline">Support</Link>
+              <Link href="/contact" className="hover:text-indigo-600 transition-colors hover:underline">Contact</Link>
+              <Link href="/docs" className="hover:text-indigo-600 transition-colors hover:underline">API Docs</Link>
             </nav>
           </div>
         </div>

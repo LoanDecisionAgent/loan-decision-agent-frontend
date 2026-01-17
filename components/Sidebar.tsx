@@ -21,17 +21,17 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, isOpen, onClose }) =>
     { label: 'Dashboard', icon: 'dashboard', path: '/dashboard' },
     ...(isAdmin 
       ? [
-          { label: 'Vendors', icon: 'group', path: '/vendors' },
-          { label: 'Audit Logs', icon: 'history', path: '/audit-logs' },
-          { label: 'API Keys', icon: 'vpn_key', path: '/api-keys' },
+          { label: 'Vendors', icon: 'group', path: '/dashboard/vendors' },
+          { label: 'Audit Logs', icon: 'history', path: '/dashboard/audit-logs' },
+          { label: 'API Keys', icon: 'vpn_key', path: '/dashboard/api-keys' },
         ]
       : [
-          { label: 'Batch Processing', icon: 'upload_file', path: '/batch-upload' },
-          { label: 'Request Logs', icon: 'history', path: '/request-logs' },
-          { label: 'Feedback', icon: 'dashboard/feedback', path: '/feedback' },
+          { label: 'Batch Processing', icon: 'upload_file', path: '/dashboard/batch-upload' },
+          { label: 'Request Logs', icon: 'history', path: '/dashboard/request-logs' },
+          { label: 'Feedback', icon: 'feedback', path: '/dashboard/feedback' },
         ]
     ),
-    { label: 'Documentation', icon: 'description', path: '/docs' },
+    { label: 'Documentation', icon: 'description', path: '/dashboard/docs' },
   ];
 
   return (

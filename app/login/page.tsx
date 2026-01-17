@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUser } from '../../lib/user-context';
 import { UserRole } from '../../types';
+import { validateEmail } from '../../lib/error-handler';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -21,6 +22,17 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!email || !password) {
+      return;
+    }
+    
+    if (!validateEmail(email)) {
+      // Email validation is handled by HTML5, but we can add custom message if needed
+      return;
+    }
+    
     const role = email.toLowerCase().includes('admin') ? UserRole.ADMIN : UserRole.VENDOR;
     handleAuth(role);
   };

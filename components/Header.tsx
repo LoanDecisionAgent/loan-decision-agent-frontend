@@ -19,13 +19,18 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, onMenuClick, isDarkMode
   const getPageConfig = () => {
     const configs: Record<string, string> = {
       '/dashboard': 'Overview',
-      '/batch-upload': 'Batch Submission',
-      '/request-logs': 'Live Requests',
-      '/vendors': 'Vendor Management',
-      '/audit-logs': 'System Audits',
-      '/api-keys': 'Authentication Keys',
-      '/feedback': 'Model Feedback',
-      '/docs': 'Documentation',
+      '/dashboard/batch-upload': 'Batch Submission',
+      '/dashboard/request-logs': 'Live Requests',
+      '/dashboard/vendors': 'Vendor Management',
+      '/dashboard/audit-logs': 'System Audits',
+      '/dashboard/api-keys': 'Authentication Keys',
+      '/dashboard/feedback': 'Model Feedback',
+      '/dashboard/docs': 'Documentation',
+      '/docs': 'API Documentation',
+      '/privacy': 'Privacy Policy',
+      '/terms': 'Terms of Service',
+      '/support': 'Support',
+      '/contact': 'Contact Us',
     };
     return configs[pathname || ''] || 'Dashboard';
   };
@@ -50,9 +55,20 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, onMenuClick, isDarkMode
             {getPageConfig()}
           </h2>
           <nav className="hidden sm:flex items-center gap-1.5 text-[10px] text-slate-400 uppercase font-black tracking-widest">
-             <Link href="/dashboard" className="hover:text-indigo-600 transition-colors">Portal</Link>
-             {breadcrumbs.length > 0 && <span>/</span>}
-             {breadcrumbs.join(' / ')}
+             {(pathname?.startsWith('/dashboard') || pathname === '/') && (
+               <>
+                 <Link href="/dashboard" className="hover:text-indigo-600 transition-colors">Portal</Link>
+                 {breadcrumbs.length > 0 && <span>/</span>}
+                 {breadcrumbs.filter(b => b.toLowerCase() !== 'dashboard').join(' / ')}
+               </>
+             )}
+             {pathname?.startsWith('/dashboard') === false && pathname !== '/' && (
+               <>
+                 <Link href="/" className="hover:text-indigo-600 transition-colors">Home</Link>
+                 {breadcrumbs.length > 0 && <span>/</span>}
+                 {breadcrumbs.join(' / ')}
+               </>
+             )}
           </nav>
         </div>
       </div>

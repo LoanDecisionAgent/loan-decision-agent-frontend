@@ -28,9 +28,9 @@ The frontend is a **standalone, independent microservice** that:
 ### Setup
 
 1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+    ```bash
+    npm install
+    ```
 
 2. **Create a `.env.local` file** (or `.env`) and set the backend API base URL:
    ```env
@@ -43,34 +43,55 @@ The frontend is a **standalone, independent microservice** that:
    - For production: Set according to your infrastructure
 
 3. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
+    ```bash
+    npm run dev
+    ```
 
    The application will be available at `http://localhost:3000`.
 
 ### Available Routes
 
+#### Public Pages
 - `/` - Landing page
+- `/docs` - Public API documentation
+- `/privacy` - Privacy policy
+- `/terms` - Terms of service
+- `/support` - Support center with contact form and FAQs
+- `/contact` - Contact page
+
+#### Authentication
+- `/login` - Login page
+- `/signup` - Signup/registration page
+
+#### Application Pages
 - `/score` - Loan scoring portal (main application)
-- `/login` - Authentication portal
-- `/dashboard` - User dashboard
+- `/dashboard` - User dashboard (role-based: Admin or Vendor)
+
+#### Dashboard Sub-pages (Protected)
+- `/dashboard/vendors` - Vendor management (Admin only)
+- `/dashboard/batch-upload` - Batch file upload processing (Vendor only)
+- `/dashboard/request-logs` - API request logs (Vendor only)
+- `/dashboard/audit-logs` - System audit logs (Admin only)
+- `/dashboard/api-keys` - API key management (Admin only)
+- `/dashboard/feedback` - Model feedback submission (Vendor only)
+- `/dashboard/docs` - Internal API documentation (requires login)
+- `/dashboard/jobs/[jobId]` - Batch job details
 
 ## Docker Deployment
 
 ### Build the Docker Image
 
-```bash
-docker build -t loan-frontend .
-```
+    ```bash
+    docker build -t loan-frontend .
+    ```
 
 ### Run the Container
 
-```bash
+    ```bash
 docker run -p 3000:80 \
   -e NEXT_PUBLIC_API_BASE_URL=http://backend:3001 \
   loan-frontend
-```
+    ```
 
 The application will be available at `http://localhost:3000`.
 
@@ -101,11 +122,31 @@ services:
 
 ## API Integration
 
-The frontend consumes the following endpoint:
+The frontend consumes the following backend endpoints:
 
+### Core API Endpoints
 - **POST** `/api/score` - Submit loan application for scoring
+- **POST** `/api/batch/upload` - Upload batch file for processing
+- **GET** `/api/batch/jobs` - Get list of batch jobs
+- **GET** `/api/batch/jobs/:jobId` - Get batch job details
 
-See [docs/API_CONTRACT.md](./docs/API_CONTRACT.md) for complete API documentation.
+### Management Endpoints
+- **GET** `/api/vendors` - Get vendors list (Admin)
+- **POST** `/api/vendors` - Create vendor (Admin)
+- **PUT** `/api/vendors/:id` - Update vendor (Admin)
+- **DELETE** `/api/vendors/:id` - Delete vendor (Admin)
+- **GET** `/api/logs/requests` - Get request logs
+- **GET** `/api/audit/logs` - Get audit logs (Admin)
+- **GET** `/api/keys` - Get API keys (Admin)
+- **POST** `/api/keys` - Create API key (Admin)
+- **POST** `/api/keys/:id/revoke` - Revoke API key (Admin)
+- **DELETE** `/api/keys/:id` - Delete API key (Admin)
+
+### Feedback Endpoints
+- **GET** `/api/feedback` - Get feedback list
+- **POST** `/api/feedback` - Submit feedback
+
+See [docs/API_CONTRACT.md](./docs/API_CONTRACT.md) for detailed API documentation.
 
 ## Project Structure
 

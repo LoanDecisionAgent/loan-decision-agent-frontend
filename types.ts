@@ -68,3 +68,46 @@ export interface ApiError {
   code: string;
   message: string;
 }
+
+export interface RequestLog {
+  id: string;
+  timestamp: string;
+  endpoint: string;
+  method: string;
+  status: number;
+  responseTime: number;
+  vendorId?: string;
+  vendorName?: string;
+}
+
+export interface ApiKey {
+  id: string;
+  name: string;
+  key: string;
+  createdAt: string;
+  lastUsed?: string;
+  status: 'active' | 'revoked';
+  permissions: string[];
+}
+
+export interface Feedback {
+  id: string;
+  applicationId: string;
+  rating: number;
+  comment: string;
+  submittedAt: string;
+  submittedBy: string;
+}
+
+export interface BatchJob {
+  id: string;
+  filename?: string;
+  status: JobStatus;
+  totalRecords: number;
+  processedRecords: number;
+  successfulRecords: number;
+  failedRecords: number;
+  createdAt: string;
+  completedAt?: string;
+  errorMessage?: string;
+}

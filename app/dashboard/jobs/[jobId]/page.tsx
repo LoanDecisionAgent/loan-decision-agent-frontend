@@ -1,14 +1,13 @@
-
-"use client";
 import React from 'react';
-import { useParams } from 'next/navigation';
-import JobDetails from '../../../../pages/JobDetails';
+import JobDetailsClient from './JobDetailsClient';
 
-export default function JobDetailsPage() {
-  const params = useParams();
-  const jobId = params?.jobId as string;
+// Required for static export with dynamic routes
+export function generateStaticParams() {
+  // Return empty array for static export - routes will be handled client-side
+  return Promise.resolve([]);
+}
 
-  if (!jobId) return <div>Job not found</div>;
-
-  return <JobDetails jobId={jobId} />;
+export default function JobDetailsPage({ params }: { params: Promise<{ jobId: string }> | { jobId: string } }) {
+  const jobId = params instanceof Promise ? '' : params.jobId;
+  return <JobDetailsClient jobId={jobId} />;
 }

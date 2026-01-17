@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { scoreLoan, ApiClientError } from '../../lib/api';
 import { ScoreRequest, ScoreResponse } from '../../types';
+import { handleError } from '../../lib/error-handler';
 import Link from 'next/link';
 
 export default function ScorePage() {
@@ -50,11 +51,8 @@ export default function ScorePage() {
       const response = await scoreLoan(formData);
       setResult(response);
     } catch (err) {
-      if (err instanceof ApiClientError) {
-        setError(err.message);
-      } else {
-        setError('An unexpected error occurred. Please try again.');
-      }
+      const errorInfo = handleError(err);
+      setError(errorInfo.userMessage);
     } finally {
       setLoading(false);
     }
@@ -85,24 +83,31 @@ export default function ScorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/20 to-slate-50 dark:from-slate-950 dark:via-indigo-950/10 dark:to-slate-950 py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-indigo-600 mb-4">
+        <div className="mb-8 animate-fade-in">
+          <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 mb-6 transition-colors hover-lift">
             <span className="material-symbols-outlined">arrow_back</span>
             Back to Home
           </Link>
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2">
-            Loan Scoring Portal
-          </h1>
-          <p className="text-slate-600 dark:text-slate-400">
-            Submit loan application details for AI-powered risk assessment
-          </p>
+          <div className="flex items-center gap-4 mb-4">
+            <div className="p-3 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl text-white shadow-lg shadow-indigo-600/20">
+              <span className="material-symbols-outlined text-[32px]">calculate</span>
+            </div>
+            <div>
+              <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2">
+                Loan Scoring Portal
+              </h1>
+              <p className="text-slate-600 dark:text-slate-400">
+                Submit loan application details for AI-powered risk assessment
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Form Section */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8">
+          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-800/50 p-8 animate-slide-in-left">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-6">
               Application Details
             </h2>
@@ -297,7 +302,7 @@ export default function ScorePage() {
           </div>
 
           {/* Results Section */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8">
+          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-800/50 p-8 animate-slide-in-right">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-6">
               Scoring Results
             </h2>
