@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-http://backend:3001}
+    container_name: loan-frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-http://backend:3001}
+    restart: unless-stopped
+    networks:
+      - loan-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.loandecision.service=frontend"
+      - "com.loandecision.version=1.0.0"
+
+networks:
+  loan-network:
+    driver: bridge

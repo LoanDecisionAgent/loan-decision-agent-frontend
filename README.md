@@ -79,35 +79,54 @@ The frontend is a **standalone, independent microservice** that:
 
 ## Docker Deployment
 
-### Build the Docker Image
+### Quick Start with Docker Compose (Recommended)
 
-    ```bash
-    docker build -t loan-frontend .
-    ```
+1. **Create a `.env` file** (optional):
+   ```env
+   NEXT_PUBLIC_API_BASE_URL=http://backend:3001
+   FRONTEND_PORT=3000
+   ```
 
-### Run the Container
+2. **Build and run:**
+   ```bash
+   docker-compose up -d
+   ```
 
-    ```bash
-docker run -p 3000:80 \
+3. **Access the application:**
+   - Frontend: http://localhost:3000
+
+4. **Stop:**
+   ```bash
+   docker-compose down
+   ```
+
+### Manual Docker Build
+
+**Build the Docker Image:**
+```bash
+docker build -t loan-frontend .
+```
+
+**Run the Container:**
+```bash
+docker run -d \
+  --name loan-frontend \
+  -p 3000:80 \
   -e NEXT_PUBLIC_API_BASE_URL=http://backend:3001 \
   loan-frontend
-    ```
+```
 
 The application will be available at `http://localhost:3000`.
 
-### Docker Compose Example
+### Docker Files
 
-```yaml
-services:
-  frontend:
-    build: .
-    ports:
-      - "3000:80"
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://backend:3001
-    depends_on:
-      - backend
-```
+- `Dockerfile` - Multi-stage build (Node.js build → Nginx serve)
+- `docker-compose.yml` - Production compose file
+- `docker-compose.dev.yml` - Development compose file
+- `.dockerignore` - Files excluded from Docker build
+- `DOCKER.md` - Complete Docker documentation
+
+For detailed Docker instructions, see [DOCKER.md](./DOCKER.md).
 
 ## Environment Variables
 
