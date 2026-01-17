@@ -20,13 +20,6 @@ export interface User {
   avatar: string;
 }
 
-export interface Job {
-  id: string;
-  status: JobStatus;
-  createdAt: string;
-  recordsCount: number;
-}
-
 export interface Vendor {
   id: string;
   name: string;
