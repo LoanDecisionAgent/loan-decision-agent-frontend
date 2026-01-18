@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { getFeedback, submitFeedback, ApiClientError } from '../lib/api';
 import { handleError } from '../lib/error-handler';
-import { Feedback } from '../types';
+import type { Feedback } from '../types';
 
 export default function Feedback() {
   const [feedbackList, setFeedbackList] = useState<Feedback[]>([]);
