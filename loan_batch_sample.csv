@@ -1,0 +1,11 @@
+age,income,loanamount,interestrate,loanterm,dtiratio,employmenttype,maritalstatus,loanpurpose,hasdependents
+28,4500,15000,10,36,0.25,employed,single,personal,0
+35,6200,20000,9,48,0.30,employed,married,education,1
+42,8000,30000,8,60,0.28,self-employed,married,business,2
+30,5200,12000,11,24,0.22,employed,single,personal,0
+50,9000,40000,7,72,0.35,self-employed,married,home,3
+26,3800,8000,13,18,0.20,employed,single,personal,0
+39,7000,25000,9,48,0.27,employed,married,education,2
+45,8500,35000,8,60,0.32,self-employed,married,business,1
+33,4800,14000,12,36,0.29,employed,single,personal,0
+55,10000,50000,7,84,0.38,self-employed,married,home,2

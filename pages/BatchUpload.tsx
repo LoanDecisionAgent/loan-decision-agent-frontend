@@ -226,7 +226,7 @@ export default function BatchUpload() {
           <div className="flex items-center justify-center py-12">
             <span className="spinner w-8 h-8"></span>
           </div>
-        ) : jobs.length === 0 ? (
+        ) : (Array.isArray(jobs) ? jobs : []).length === 0 ? (
           <div className="text-center py-12">
             <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-700 mb-4">inbox</span>
             <p className="text-slate-500 dark:text-slate-400">No jobs yet. Upload a file to get started.</p>
@@ -245,7 +245,7 @@ export default function BatchUpload() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {jobs.map((job) => (
+                {(Array.isArray(jobs) ? jobs : []).map((job) => (
                   <tr key={job.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                     <td className="py-4 px-4 font-mono text-sm font-bold text-slate-900 dark:text-white">
                       {job.id.slice(0, 8)}...
@@ -253,12 +253,11 @@ export default function BatchUpload() {
                     <td className="py-4 px-4 text-sm text-slate-600 dark:text-slate-400">{job.filename || 'N/A'}</td>
                     <td className="py-4 px-4">
                       <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(job.status)}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${
-                          job.status === JobStatus.COMPLETED ? 'bg-emerald-500' :
-                          job.status === JobStatus.PROCESSING ? 'bg-blue-500' :
-                          job.status === JobStatus.FAILED ? 'bg-red-500' :
-                          'bg-yellow-500'
-                        }`}></span>
+                        <span className={`w-1.5 h-1.5 rounded-full ${job.status === JobStatus.COMPLETED ? 'bg-emerald-500' :
+                            job.status === JobStatus.PROCESSING ? 'bg-blue-500' :
+                              job.status === JobStatus.FAILED ? 'bg-red-500' :
+                                'bg-yellow-500'
+                          }`}></span>
                         {job.status}
                       </span>
                     </td>

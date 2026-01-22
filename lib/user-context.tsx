@@ -1,14 +1,18 @@
 "use client";
 
 import React, { useState, useEffect, createContext, useContext } from 'react';
-import { User, UserRole } from '../types';
+import { User } from '../types';
+import { login as apiLogin, getMe, register as apiRegister } from './api';
+import { useRouter } from 'next/navigation';
 
 interface UserContextType {
   user: User | null;
-  login: (role: UserRole) => void;
+  login: (email: string, password: string) => Promise<void>;
+  register: (data: import('../types').RegisterRequest) => Promise<void>;
   logout: () => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  isLoading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -23,12 +27,30 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
     const savedTheme = localStorage.getItem('theme');
     const isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
     setIsDarkMode(isDark);
+
+    // Check for existing token
+    const token = localStorage.getItem('token');
+    if (token) {
+      getMe()
+        .then(userData => {
+          setUser(userData);
+        })
+        .catch(() => {
+          localStorage.removeItem('token');
+          setUser(null);
+        })
+        .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -42,25 +64,38 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   }, [isDarkMode, mounted]);
 
-  const login = (role: UserRole) => {
-    const mockUser: User = {
-      id: role === UserRole.ADMIN ? 'u-admin' : 'u-vendor',
-      name: role === UserRole.ADMIN ? 'Alex Morgan' : 'Jordan Smith',
-      email: role === UserRole.ADMIN ? 'admin@engine.io' : 'jordan@acme.com',
-      role,
-      organization: role === UserRole.ADMIN ? 'Fintech Core' : 'Acme Corp',
-      avatar: `https://picsum.photos/seed/${role}/100/100`
-    };
-    setUser(mockUser);
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await apiLogin({ email, password });
+      localStorage.setItem('token', response.access_token);
+      setUser(response.user);
+    } catch (error) {
+      throw error;
+    }
   };
 
-  const logout = () => setUser(null);
+  const register = async (data: import('../types').RegisterRequest) => {
+    try {
+      const response = await apiRegister(data);
+      localStorage.setItem('token', response.access_token);
+      setUser(response.user);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    router.push('/login');
+  };
+
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
   if (!mounted) return null;
 
   return (
-    <UserContext.Provider value={{ user, login, logout, isDarkMode, toggleDarkMode }}>
+    <UserContext.Provider value={{ user, login, register, logout, isDarkMode, toggleDarkMode, isLoading }}>
       {children}
     </UserContext.Provider>
   );

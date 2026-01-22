@@ -36,14 +36,14 @@ export default function ContactPage() {
       icon: 'phone',
       title: 'Phone',
       description: 'Call us during business hours',
-      value: '+1 (555) 123-4567',
-      link: 'tel:+15551234567',
+      value: '+1 (000) 123-4567',
+      link: 'tel:+10001234567',
     },
     {
       icon: 'location_on',
       title: 'Office',
       description: 'Visit our headquarters',
-      value: '123 Finance Street, Tech City, TC 12345',
+      value: 'Mekelle, Tigray, Ethiopia',
       link: '#',
     },
   ];

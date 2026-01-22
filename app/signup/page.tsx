@@ -8,26 +8,20 @@ import { UserRole } from '../../types';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    organization: '',
-    role: 'VENDOR' as UserRole,
+    role: UserRole.VENDOR,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
-  const { login } = useUser();
+  const { register } = useUser();
   const router = useRouter();
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
@@ -43,10 +37,6 @@ export default function SignupPage() {
 
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    if (!formData.organization.trim()) {
-      newErrors.organization = 'Organization name is required';
     }
 
     setErrors(newErrors);
@@ -68,22 +58,25 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    
+
     try {
-      // Simulate API call - in production, this would call your backend
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      // Auto-login after signup
-      login(formData.role);
-      router.push('/dashboard');
-    } catch (error) {
-      setErrors({ submit: 'Registration failed. Please try again.' });
+      await register({
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      });
+      // Force hard redirect to ensure state is fresh
+      window.location.href = '/dashboard';
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      const message = error.message || 'Registration failed. Please try again.';
+      setErrors({ submit: message });
     } finally {
       setLoading(false);
     }
@@ -107,31 +100,6 @@ export default function SignupPage() {
         <div className="w-full rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-2xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden animate-scale-in">
           <div className="p-10">
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-slate-400">
-                    person
-                  </span>
-                  <input
-                    className={`w-full h-14 rounded-2xl border pl-12 pr-4 text-slate-900 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none ${
-                      errors.name
-                        ? 'border-red-300 bg-red-50 dark:bg-red-950/20 dark:border-red-800'
-                        : 'border-slate-200 bg-slate-50 dark:bg-slate-800 dark:border-slate-700'
-                    }`}
-                    type="text"
-                    name="name"
-                    placeholder="John Doe"
-                    value={formData.name}
-                    onChange={handleChange}
-                  />
-                </div>
-                {errors.name && (
-                  <p className="text-xs text-red-600 dark:text-red-400 animate-fade-in">{errors.name}</p>
-                )}
-              </div>
 
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">
@@ -142,11 +110,10 @@ export default function SignupPage() {
                     mail
                   </span>
                   <input
-                    className={`w-full h-14 rounded-2xl border pl-12 pr-4 text-slate-900 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none ${
-                      errors.email
-                        ? 'border-red-300 bg-red-50 dark:bg-red-950/20 dark:border-red-800'
-                        : 'border-slate-200 bg-slate-50 dark:bg-slate-800 dark:border-slate-700'
-                    }`}
+                    className={`w-full h-14 rounded-2xl border pl-12 pr-4 text-slate-900 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none ${errors.email
+                      ? 'border-red-300 bg-red-50 dark:bg-red-950/20 dark:border-red-800'
+                      : 'border-slate-200 bg-slate-50 dark:bg-slate-800 dark:border-slate-700'
+                      }`}
                     type="email"
                     name="email"
                     placeholder="name@company.com"
@@ -169,11 +136,10 @@ export default function SignupPage() {
                       lock
                     </span>
                     <input
-                      className={`w-full h-14 rounded-2xl border pl-12 pr-12 text-slate-900 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none ${
-                        errors.password
-                          ? 'border-red-300 bg-red-50 dark:bg-red-950/20 dark:border-red-800'
-                          : 'border-slate-200 bg-slate-50 dark:bg-slate-800 dark:border-slate-700'
-                      }`}
+                      className={`w-full h-14 rounded-2xl border pl-12 pr-12 text-slate-900 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none ${errors.password
+                        ? 'border-red-300 bg-red-50 dark:bg-red-950/20 dark:border-red-800'
+                        : 'border-slate-200 bg-slate-50 dark:bg-slate-800 dark:border-slate-700'
+                        }`}
                       type={showPassword ? 'text' : 'password'}
                       name="password"
                       placeholder="••••••••"
@@ -204,11 +170,10 @@ export default function SignupPage() {
                       lock
                     </span>
                     <input
-                      className={`w-full h-14 rounded-2xl border pl-12 pr-12 text-slate-900 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none ${
-                        errors.confirmPassword
-                          ? 'border-red-300 bg-red-50 dark:bg-red-950/20 dark:border-red-800'
-                          : 'border-slate-200 bg-slate-50 dark:bg-slate-800 dark:border-slate-700'
-                      }`}
+                      className={`w-full h-14 rounded-2xl border pl-12 pr-12 text-slate-900 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none ${errors.confirmPassword
+                        ? 'border-red-300 bg-red-50 dark:bg-red-950/20 dark:border-red-800'
+                        : 'border-slate-200 bg-slate-50 dark:bg-slate-800 dark:border-slate-700'
+                        }`}
                       type={showConfirmPassword ? 'text' : 'password'}
                       name="confirmPassword"
                       placeholder="••••••••"
@@ -231,34 +196,6 @@ export default function SignupPage() {
                     </p>
                   )}
                 </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">
-                  Organization
-                </label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-slate-400">
-                    business
-                  </span>
-                  <input
-                    className={`w-full h-14 rounded-2xl border pl-12 pr-4 text-slate-900 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none ${
-                      errors.organization
-                        ? 'border-red-300 bg-red-50 dark:bg-red-950/20 dark:border-red-800'
-                        : 'border-slate-200 bg-slate-50 dark:bg-slate-800 dark:border-slate-700'
-                    }`}
-                    type="text"
-                    name="organization"
-                    placeholder="Your Organization"
-                    value={formData.organization}
-                    onChange={handleChange}
-                  />
-                </div>
-                {errors.organization && (
-                  <p className="text-xs text-red-600 dark:text-red-400 animate-fade-in">
-                    {errors.organization}
-                  </p>
-                )}
               </div>
 
               <div className="space-y-2">

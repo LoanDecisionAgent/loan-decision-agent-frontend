@@ -4,64 +4,93 @@
 import React from 'react';
 import Link from 'next/link';
 
-const features = [
-  { title: 'Sub-100ms Scoring', icon: 'bolt', desc: 'Real-time decisioning for synchronous user flows.' },
-  { title: 'Asynchronous Batching', icon: 'folder_zip', desc: 'Process massive historical datasets with high throughput.' },
-  { title: 'Regulatory Compliance', icon: 'verified_user', desc: 'Built-in SHAP explanation values for model transparency.' },
-  { title: 'Partner Management', icon: 'hub', desc: 'Granular API controls for third-party vendors and agents.' },
-];
-
 export default function LandingPage() {
-  const currentYear = 2025;
+  const currentYear = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950">
-      <nav className="sticky top-0 z-50 w-full border-b border-slate-100 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center h-20">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-600/20">
-              <span className="material-symbols-outlined text-[24px]">dataset</span>
+    <div className="min-h-screen flex flex-col bg-[#050511] text-white overflow-hidden selection:bg-indigo-500/30">
+      {/* Abstract Background Elements */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 rounded-full blur-[120px] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-[40%] left-[30%] w-[30%] h-[30%] bg-blue-500/10 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '4s' }}></div>
+      </div>
+
+      <nav className="relative z-50 w-full border-b border-white/5 bg-[#050511]/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center h-24">
+          <div className="flex items-center gap-4 group cursor-pointer">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl blur opacity-50 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative p-2.5 bg-[#0A0A1F] rounded-xl border border-white/10 group-hover:border-white/20 transition-colors">
+                <span className="material-symbols-outlined text-[24px] text-white">dataset</span>
+              </div>
             </div>
-            <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">LoanDecision</span>
+            <span className="text-xl font-bold tracking-tight text-white group-hover:text-indigo-400 transition-colors">LoanDecision</span>
           </div>
           <div className="flex items-center gap-8">
-            <Link href="/docs" className="hidden md:block text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors hover:underline">API Docs</Link>
-            <Link href="/contact" className="hidden md:block text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors hover:underline">Contact</Link>
-            <Link href="/login" className="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-6 py-2.5 rounded-xl text-sm font-black hover:scale-105 transition-all">
-              Launch App
+            <Link href="/docs" className="hidden md:block text-sm font-medium text-slate-400 hover:text-white transition-colors">API Reference</Link>
+            <Link href="/contact" className="hidden md:block text-sm font-medium text-slate-400 hover:text-white transition-colors">Contact</Link>
+            <Link href="/login" className="group relative px-6 py-3 rounded-xl overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all group-hover:scale-105"></div>
+              <span className="relative text-sm font-bold text-white flex items-center gap-2">
+                Launch App
+                <span className="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+              </span>
             </Link>
           </div>
         </div>
       </nav>
 
-      <main className="flex-grow pt-24 pb-32">
+      <main className="relative z-10 flex-grow pt-32 pb-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl mb-32 animate-fade-in">
-            <h1 className="text-6xl md:text-8xl font-black tracking-tight text-slate-900 dark:text-white mb-8 leading-[0.9] animate-slide-in-left">
-              Decisions <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">at scale.</span>
+
+          {/* Hero Section */}
+          <div className="max-w-4xl mb-40 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-8 hover:bg-indigo-500/20 transition-colors cursor-default">
+              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+              v2.0 Now Available
+            </div>
+
+            <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-white mb-8 leading-[0.95]">
+              Decisions <br />
+              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                at Scale.
+              </span>
             </h1>
-            <p className="text-2xl text-slate-500 dark:text-slate-400 leading-relaxed mb-12 animate-slide-in-right">
-              The lightweight alternative to enterprise scoring engines. Built for modern fintech developers who value speed, auditability, and ease of integration.
+
+            <p className="text-2xl text-slate-400 leading-relaxed mb-12 max-w-2xl font-light">
+              The high-frequency scoring engine for modern fintechs.
+              <span className="text-indigo-400 font-normal"> Sub-50ms latency</span>,
+              <span className="text-indigo-400 font-normal"> 99.99% uptime</span>, and
+              <span className="text-indigo-400 font-normal"> bank-grade security</span>.
             </p>
-            <div className="flex flex-wrap gap-4 animate-scale-in">
-              <Link href="/score" className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white h-14 px-10 rounded-2xl font-black text-lg flex items-center gap-2 shadow-2xl shadow-indigo-600/30 hover:shadow-indigo-600/50 hover:scale-105 active:scale-100 transition-all hover-lift">
-                Get Started
-                <span className="material-symbols-outlined">arrow_forward</span>
+
+            <div className="flex flex-wrap gap-6">
+              <Link href="/score" className="group relative h-16 px-10 rounded-2xl flex items-center gap-3 overflow-hidden bg-white text-[#050511] font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all">
+                <span className="relative z-10">Start Scoring</span>
+                <span className="relative z-10 material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </Link>
-              <Link href="/login" className="border-2 border-slate-200 dark:border-slate-800 h-14 px-10 rounded-2xl font-black text-lg flex items-center hover:bg-slate-50 dark:hover:bg-slate-900 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all hover-lift">
-                Dashboard
+
+              <Link href="/login" className="h-16 px-10 rounded-2xl flex items-center gap-3 border border-white/10 hover:bg-white/5 font-bold text-lg transition-all hover:border-white/20">
+                <span>View Dashboard</span>
               </Link>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 border-t border-slate-100 dark:border-slate-800 pt-20">
-            {features.map((f, index) => (
-              <div key={f.title} className="group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="mb-6 h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white transition-all shadow-lg group-hover:shadow-xl group-hover:scale-110">
-                  <span className="material-symbols-outlined text-[28px]">{f.icon}</span>
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 border-t border-white/5 pt-24">
+            {[
+              { title: 'Real-time Scoring', icon: 'bolt', desc: 'Synchronous decisioning in under 100ms for instant approvals.' },
+              { title: 'Batch Processing', icon: 'layers', desc: 'Process millions of records asynchronously with high throughput.' },
+              { title: 'Audit Trails', icon: 'history_edu', desc: 'Immutable logs for every decision and configuration change.' },
+              { title: 'Vendor Control', icon: 'admin_panel_settings', desc: 'Granular access management for third-party partners.' },
+            ].map((f, i) => (
+              <div key={i} className="group p-8 rounded-3xl bg-[#0A0A1F]/50 border border-white/5 hover:bg-[#0A0A1F] hover:border-indigo-500/30 transition-all duration-300">
+                <div className="mb-6 w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center group-hover:bg-indigo-500 group-hover:scale-110 transition-all duration-300">
+                  <span className="material-symbols-outlined text-[28px] text-indigo-400 group-hover:text-white transition-colors">{f.icon}</span>
                 </div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{f.title}</h3>
-                <p className="text-slate-500 dark:text-slate-400 leading-relaxed text-sm">
+                <h3 className="text-xl font-bold text-white mb-3">{f.title}</h3>
+                <p className="text-slate-400 leading-relaxed text-sm group-hover:text-slate-300 transition-colors">
                   {f.desc}
                 </p>
               </div>
@@ -70,24 +99,13 @@ export default function LandingPage() {
         </div>
       </main>
 
-      <footer className="border-t border-slate-100 dark:border-slate-800 py-16 bg-slate-50/50 dark:bg-slate-900/50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-1 bg-slate-900 rounded text-white"><span className="material-symbols-outlined text-[16px]">dataset</span></div>
-                <span className="font-black text-slate-900 dark:text-white">LoanDecisionAgent</span>
-              </div>
-              <p className="text-sm text-slate-500">© {currentYear} Fintech Core Engine. All rights reserved.</p>
-            </div>
-            <nav className="flex gap-10 text-xs font-black uppercase tracking-[0.2em] text-slate-400">
-              <Link href="/privacy" className="hover:text-indigo-600 transition-colors hover:underline">Privacy</Link>
-              <Link href="/terms" className="hover:text-indigo-600 transition-colors hover:underline">Terms</Link>
-              <Link href="/support" className="hover:text-indigo-600 transition-colors hover:underline">Support</Link>
-              <Link href="/contact" className="hover:text-indigo-600 transition-colors hover:underline">Contact</Link>
-              <Link href="/docs" className="hover:text-indigo-600 transition-colors hover:underline">API Docs</Link>
-            </nav>
+      <footer className="border-t border-white/5 py-12 bg-[#020205]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="text-sm font-mono text-slate-500">System Operational</span>
           </div>
+          <p className="text-sm text-slate-600">© {currentYear} LoanDecision AI. Built for the future.</p>
         </div>
       </footer>
     </div>

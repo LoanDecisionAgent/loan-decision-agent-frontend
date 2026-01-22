@@ -12,9 +12,9 @@ The frontend is a **standalone, independent microservice** that:
 
 ## Architecture
 
-- **Framework**: Next.js 14 (React)
-- **Build**: Static export for optimal performance
-- **Production Server**: Nginx (multi-stage Docker build)
+- **Framework**: Next.js 14 (React) with App Router
+- **Build**: Standard Next.js build (supports SSR and static generation)
+- **Production Server**: Next.js server (or Nginx for Docker deployments)
 - **API Integration**: HTTP-only, configured via environment variables
 
 ## Prerequisites
@@ -76,6 +76,45 @@ The frontend is a **standalone, independent microservice** that:
 - `/dashboard/feedback` - Model feedback submission (Vendor only)
 - `/dashboard/docs` - Internal API documentation (requires login)
 - `/dashboard/jobs/[jobId]` - Batch job details
+
+## Vercel Deployment
+
+### Quick Deploy to Vercel
+
+1. **Install Vercel CLI** (optional):
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **Deploy from the frontend directory:**
+   ```bash
+   vercel
+   ```
+
+   Or connect your GitHub repository to Vercel for automatic deployments.
+
+3. **Set Environment Variables in Vercel Dashboard:**
+   - Go to your project settings → Environment Variables
+   - Add: `NEXT_PUBLIC_API_BASE_URL` = `https://your-backend-api.com`
+   - Redeploy after adding environment variables
+
+### Vercel Configuration
+
+- **Framework**: Automatically detected (Next.js)
+- **Build Command**: `npm run build` (default)
+- **Output Directory**: `.next` (auto-detected)
+- **Node Version**: 18.x (auto-detected)
+
+The project includes:
+- `vercel.json` - Vercel configuration
+- `.vercelignore` - Files excluded from deployment
+
+### Environment Variables for Vercel
+
+Set these in the Vercel dashboard:
+- `NEXT_PUBLIC_API_BASE_URL` - Your backend API URL (e.g., `https://api.yourdomain.com`)
+
+**Note**: Vercel automatically handles Next.js environment variables prefixed with `NEXT_PUBLIC_`.
 
 ## Docker Deployment
 
@@ -193,11 +232,14 @@ See [docs/API_CONTRACT.md](./docs/API_CONTRACT.md) for detailed API documentatio
 ✅ **Environment-Driven**: All configuration via environment variables  
 ✅ **Docker-Ready**: Production-optimized multi-stage build  
 ✅ **Independent**: Can be replaced without affecting backend  
+✅ **Premium UI/UX**: Modern animations, glassmorphism, and responsive design  
+✅ **Robust Error Handling**: Resilient UI that handles API failures gracefully  
+✅ **I18n Support**: Built-in internationalization for multi-language support  
 
 ## Development Scripts
 
 - `npm run dev` - Start development server
-- `npm run build` - Build for production (creates `out/` directory)
+- `npm run build` - Build for production (creates `.next/` directory)
 - `npm run start` - Start production server (not used in Docker)
 - `npm run lint` - Run ESLint
 - `npm test` - Run tests

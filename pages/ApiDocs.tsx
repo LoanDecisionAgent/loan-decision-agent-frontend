@@ -31,13 +31,6 @@ export default function ApiDocs() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
         {/* Header */}
         <div className="mb-12 animate-fade-in">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 mb-6 transition-colors"
-          >
-            <span className="material-symbols-outlined">arrow_back</span>
-            Back to Dashboard
-          </Link>
           <div className="flex items-center gap-4 mb-4">
             <div className="p-3 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl text-white shadow-lg shadow-indigo-600/20">
               <span className="material-symbols-outlined text-[32px]">api</span>
@@ -59,11 +52,10 @@ export default function ApiDocs() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-6 py-3 font-bold text-sm border-b-2 transition-all ${
-                activeTab === tab.id
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-              }`}
+              className={`px-6 py-3 font-bold text-sm border-b-2 transition-all ${activeTab === tab.id
+                ? 'border-indigo-600 text-indigo-600'
+                : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                }`}
             >
               <span className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[18px]">{tab.icon}</span>
@@ -117,7 +109,7 @@ export default function ApiDocs() {
                   All responses are returned in JSON format with the following structure:
                 </p>
                 <CodeBlock>
-{`{
+                  {`{
   "default_probability": 0.48,
   "risk_band": "MEDIUM",
   "model_decision": "APPROVE",
@@ -147,7 +139,7 @@ export default function ApiDocs() {
                 <div className="mb-6">
                   <h3 className="font-black text-slate-900 dark:text-white mb-3">Request Body</h3>
                   <CodeBlock>
-{`{
+                    {`{
   "age": 35,
   "income": 5500,
   "loanamount": 12000,
@@ -165,7 +157,7 @@ export default function ApiDocs() {
                 <div>
                   <h3 className="font-black text-slate-900 dark:text-white mb-3">Response</h3>
                   <CodeBlock>
-{`{
+                    {`{
   "default_probability": 0.48,
   "risk_band": "MEDIUM",
   "model_decision": "APPROVE",
@@ -230,7 +222,7 @@ export default function ApiDocs() {
                   cURL Example
                 </h2>
                 <CodeBlock language="bash">
-{`curl -X POST ${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://backend:3001'}/api/score \\
+                  {`curl -X POST ${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://backend:3001'}/api/score \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -d '{
@@ -253,7 +245,7 @@ export default function ApiDocs() {
                   JavaScript Example
                 </h2>
                 <CodeBlock language="javascript">
-{`const response = await fetch('${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://backend:3001'}/api/score', {
+                  {`const response = await fetch('${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://backend:3001'}/api/score', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -283,7 +275,7 @@ console.log(result);`}
                   Python Example
                 </h2>
                 <CodeBlock language="python">
-{`import requests
+                  {`import requests
 
 url = "${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://backend:3001'}/api/score"
 headers = {

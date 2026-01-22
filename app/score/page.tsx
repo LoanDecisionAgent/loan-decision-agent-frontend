@@ -1,23 +1,25 @@
 "use client";
 
 import React, { useState } from 'react';
-import { scoreLoan, ApiClientError } from '../../lib/api';
+import { scoreLoan } from '../../lib/api';
 import { ScoreRequest, ScoreResponse } from '../../types';
 import { handleError } from '../../lib/error-handler';
 import Link from 'next/link';
+import LoadingState from '../../components/LoadingState';
+import PageTransition from '../../components/PageTransition';
 
 export default function ScorePage() {
   const [formData, setFormData] = useState<ScoreRequest>({
-    age: 30,
+    applicant_id: `APP-${Math.floor(Math.random() * 10000)}`,
+    requested_amount: 50000,
+    requested_term_months: 36,
     income: 5000,
-    loanamount: 10000,
-    interestrate: 0.08,
-    loanterm: 36,
-    dtiratio: 0.15,
-    employmenttype: 'Salaried',
-    maritalstatus: 'Single',
-    loanpurpose: 'Education',
-    hasdependents: 0,
+    monthly_expenses: 2000,
+    existing_debt: 500,
+    credit_score: 720,
+    employment_status: 'EMPLOYED',
+    employment_duration_months: 24,
+    age: 30,
   });
 
   const [result, setResult] = useState<ScoreResponse | null>(null);
@@ -28,13 +30,9 @@ export default function ScorePage() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'hasdependents' || name === 'age' || name === 'loanterm'
-        ? parseInt(value, 10)
-        : name === 'interestrate' || name === 'dtiratio'
-        ? parseFloat(value)
-        : name === 'income' || name === 'loanamount'
-        ? parseFloat(value)
-        : value,
+      [name]: name === 'employment_status' || name === 'applicant_id'
+        ? value
+        : value === '' ? 0 : parseInt(value, 10),
     }));
     // Clear previous results/errors when form changes
     setResult(null);
@@ -83,12 +81,14 @@ export default function ScorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/20 to-slate-50 dark:from-slate-950 dark:via-indigo-950/10 dark:to-slate-950 py-12 px-4">
+    <PageTransition className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/20 to-slate-50 dark:from-slate-950 dark:via-indigo-950/10 dark:to-slate-950 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 animate-fade-in">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 mb-6 transition-colors hover-lift">
-            <span className="material-symbols-outlined">arrow_back</span>
-            Back to Home
+          <Link href="/" className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 mb-8 transition-colors group">
+            <span className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 transition-colors">
+              <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+            </span>
+            Back to Dashboard
           </Link>
           <div className="flex items-center gap-4 mb-4">
             <div className="p-3 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl text-white shadow-lg shadow-indigo-600/20">
@@ -112,6 +112,115 @@ export default function ScorePage() {
               Application Details
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
+
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">
+                  Applicant ID
+                </label>
+                <input
+                  type="text"
+                  name="applicant_id"
+                  value={formData.applicant_id}
+                  onChange={handleChange}
+                  required
+                  className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
+                    Request Amount
+                  </label>
+                  <input
+                    type="number"
+                    name="requested_amount"
+                    value={formData.requested_amount}
+                    onChange={handleChange}
+                    min="0"
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
+                    Term (Months)
+                  </label>
+                  <input
+                    type="number"
+                    name="requested_term_months"
+                    value={formData.requested_term_months}
+                    onChange={handleChange}
+                    min="1"
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
+                    Income
+                  </label>
+                  <input
+                    type="number"
+                    name="income"
+                    value={formData.income}
+                    onChange={handleChange}
+                    min="0"
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
+                    Expenses
+                  </label>
+                  <input
+                    type="number"
+                    name="monthly_expenses"
+                    value={formData.monthly_expenses}
+                    onChange={handleChange}
+                    min="0"
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
+                    Existing Debt
+                  </label>
+                  <input
+                    type="number"
+                    name="existing_debt"
+                    value={formData.existing_debt}
+                    onChange={handleChange}
+                    min="0"
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
+                    Credit Score
+                  </label>
+                  <input
+                    type="number"
+                    name="credit_score"
+                    value={formData.credit_score}
+                    onChange={handleChange}
+                    min="300"
+                    max="850"
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                  />
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
@@ -130,15 +239,14 @@ export default function ScorePage() {
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                    Monthly Income
+                    Emp. Duration (Mo)
                   </label>
                   <input
                     type="number"
-                    name="income"
-                    value={formData.income}
+                    name="employment_duration_months"
+                    value={formData.employment_duration_months}
                     onChange={handleChange}
                     min="0"
-                    step="100"
                     required
                     className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
                   />
@@ -147,140 +255,18 @@ export default function ScorePage() {
 
               <div>
                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                  Loan Amount
-                </label>
-                <input
-                  type="number"
-                  name="loanamount"
-                  value={formData.loanamount}
-                  onChange={handleChange}
-                  min="0"
-                  step="100"
-                  required
-                  className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                    Interest Rate (e.g., 0.08 for 8%)
-                  </label>
-                  <input
-                    type="number"
-                    name="interestrate"
-                    value={formData.interestrate}
-                    onChange={handleChange}
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    required
-                    className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                    Loan Term (months)
-                  </label>
-                  <input
-                    type="number"
-                    name="loanterm"
-                    value={formData.loanterm}
-                    onChange={handleChange}
-                    min="1"
-                    max="360"
-                    required
-                    className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                  Debt-to-Income Ratio (e.g., 0.18 for 18%)
-                </label>
-                <input
-                  type="number"
-                  name="dtiratio"
-                  value={formData.dtiratio}
-                  onChange={handleChange}
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  required
-                  className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                  Employment Type
+                  Employment Status
                 </label>
                 <select
-                  name="employmenttype"
-                  value={formData.employmenttype}
+                  name="employment_status"
+                  value={formData.employment_status}
                   onChange={handleChange}
                   required
                   className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
                 >
-                  <option value="Salaried">Salaried</option>
-                  <option value="Self-Employed">Self-Employed</option>
-                  <option value="Unemployed">Unemployed</option>
-                  <option value="Retired">Retired</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                  Marital Status
-                </label>
-                <select
-                  name="maritalstatus"
-                  value={formData.maritalstatus}
-                  onChange={handleChange}
-                  required
-                  className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                >
-                  <option value="Single">Single</option>
-                  <option value="Married">Married</option>
-                  <option value="Divorced">Divorced</option>
-                  <option value="Widowed">Widowed</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                  Loan Purpose
-                </label>
-                <select
-                  name="loanpurpose"
-                  value={formData.loanpurpose}
-                  onChange={handleChange}
-                  required
-                  className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                >
-                  <option value="Education">Education</option>
-                  <option value="Home">Home</option>
-                  <option value="Business">Business</option>
-                  <option value="Personal">Personal</option>
-                  <option value="Medical">Medical</option>
-                  <option value="Vehicle">Vehicle</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                  Has Dependents
-                </label>
-                <select
-                  name="hasdependents"
-                  value={formData.hasdependents}
-                  onChange={handleChange}
-                  required
-                  className="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                >
-                  <option value={0}>No</option>
-                  <option value={1}>Yes</option>
+                  <option value="EMPLOYED">Employed</option>
+                  <option value="SELF_EMPLOYED">Self-Employed</option>
+                  <option value="UNEMPLOYED">Unemployed</option>
                 </select>
               </div>
 
@@ -308,12 +294,7 @@ export default function ScorePage() {
             </h2>
 
             {loading && (
-              <div className="flex flex-col items-center justify-center py-12">
-                <span className="material-symbols-outlined text-6xl text-indigo-600 animate-spin mb-4">
-                  sync
-                </span>
-                <p className="text-slate-600 dark:text-slate-400">Analyzing application...</p>
-              </div>
+              <LoadingState message="Analyzing application..." />
             )}
 
             {error && (
@@ -333,10 +314,10 @@ export default function ScorePage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-6">
                     <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-2">
-                      Default Probability
+                      Default Risk
                     </p>
                     <p className="text-3xl font-black text-slate-900 dark:text-white">
-                      {(result.default_probability * 100).toFixed(1)}%
+                      {(result.probability * 100).toFixed(1)}%
                     </p>
                   </div>
                   <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-6">
@@ -356,34 +337,36 @@ export default function ScorePage() {
                     Model Decision
                   </p>
                   <span
-                    className={`inline-block px-6 py-3 rounded-xl font-black text-lg border ${getDecisionColor(result.model_decision)}`}
+                    className={`inline-block px-6 py-3 rounded-xl font-black text-lg border ${getDecisionColor(result.decision)}`}
                   >
-                    {result.model_decision}
+                    {result.decision}
                   </span>
                 </div>
 
-                {result.top_factors && result.top_factors.length > 0 && (
-                  <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-6">
-                    <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-4">
-                      Top Influencing Factors
-                    </p>
-                    <div className="space-y-2">
-                      {result.top_factors.map((factor, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-3 bg-white dark:bg-slate-900 rounded-lg p-3"
-                        >
-                          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 font-bold text-sm">
-                            {index + 1}
-                          </span>
-                          <span className="text-slate-900 dark:text-white font-medium capitalize">
-                            {factor}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                {/* AI Analysis Explanation */}
+                <div className={`rounded-xl p-6 border ${result.decision === 'APPROVE'
+                    ? 'bg-green-50/50 border-green-200 dark:bg-green-900/10 dark:border-green-800'
+                    : 'bg-red-50/50 border-red-200 dark:bg-red-900/10 dark:border-red-800'
+                  }`}>
+                  <h3 className={`text-lg font-bold mb-2 flex items-center gap-2 ${result.decision === 'APPROVE' ? 'text-green-800 dark:text-green-300' : 'text-red-800 dark:text-red-300'
+                    }`}>
+                    <span className="material-symbols-outlined">lightbulb</span>
+                    AI Analysis
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {result.decision === 'APPROVE'
+                      ? `Based on the analysis, this application is recommended for approval. The estimated default risk is only ${(result.probability * 100).toFixed(1)}%, placing it in the ${result.risk_band} risk category.`
+                      : `This application has been flagged for rejection due to a higher estimated default risk of ${(result.probability * 100).toFixed(1)}%. The ${result.risk_band} risk classification suggests potential repayment challenges.`
+                    }
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4">
+                  <p className="text-xs text-slate-500 dark:text-slate-500">
+                    Application ID: {result.application_id}
+                  </p>
+                </div>
+
               </div>
             )}
 
@@ -400,6 +383,6 @@ export default function ScorePage() {
           </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

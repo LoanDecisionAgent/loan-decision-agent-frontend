@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '../lib/user-context';
+import { getVendors, getDashboardStats } from '../lib/api';
 
 interface StatCardProps {
   title: string;
@@ -35,23 +36,31 @@ const AdminDashboard: React.FC = () => {
     totalVendors: 0,
     activeVendors: 0,
     totalRequests: 0,
-    systemHealth: 0,
+    avgLatency: 0,
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading stats
-    const timer = setTimeout(() => {
-      setStats({
-        totalVendors: 47,
-        activeVendors: 42,
-        totalRequests: 125847,
-        systemHealth: 99.8,
-      });
-      setLoading(false);
-    }, 800);
+    async function loadStats() {
+      try {
+        const [vendors, dashboardStats] = await Promise.all([
+          getVendors().catch(() => []),
+          getDashboardStats().catch(() => ({ totalRequests: 0, approved: 0, rejected: 0, avgLatencyMs: 0 }))
+        ]);
 
-    return () => clearTimeout(timer);
+        setStats({
+          totalVendors: Array.isArray(vendors) ? vendors.length : 0,
+          activeVendors: Array.isArray(vendors) ? vendors.filter(v => v.status === 'Active').length : 0,
+          totalRequests: dashboardStats?.totalRequests || 0,
+          avgLatency: dashboardStats?.avgLatencyMs || 0,
+        });
+      } catch (error) {
+        console.error('Failed to load stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadStats();
   }, []);
 
   const systemAlerts = [
@@ -114,9 +123,9 @@ const AdminDashboard: React.FC = () => {
           color="bg-gradient-to-br from-purple-600 to-purple-700"
         />
         <StatCard
-          title="System Health"
-          value={`${stats.systemHealth}%`}
-          icon="monitor_heart"
+          title="Avg. Latency"
+          value={`${stats.avgLatency}ms`}
+          icon="speed"
           color="bg-gradient-to-br from-blue-600 to-blue-700"
         />
       </div>
@@ -177,28 +186,26 @@ const AdminDashboard: React.FC = () => {
             {systemAlerts.map((alert) => (
               <div
                 key={alert.id}
-                className={`flex items-start gap-3 p-3 rounded-xl ${
-                  alert.type === 'success'
-                    ? 'bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/50'
-                    : alert.type === 'warning'
+                className={`flex items-start gap-3 p-3 rounded-xl ${alert.type === 'success'
+                  ? 'bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/50'
+                  : alert.type === 'warning'
                     ? 'bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-900/50'
                     : 'bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50'
-                }`}
+                  }`}
               >
                 <span
-                  className={`material-symbols-outlined text-[20px] ${
-                    alert.type === 'success'
-                      ? 'text-green-600 dark:text-green-400'
-                      : alert.type === 'warning'
+                  className={`material-symbols-outlined text-[20px] ${alert.type === 'success'
+                    ? 'text-green-600 dark:text-green-400'
+                    : alert.type === 'warning'
                       ? 'text-yellow-600 dark:text-yellow-400'
                       : 'text-blue-600 dark:text-blue-400'
-                  }`}
+                    }`}
                 >
                   {alert.type === 'success'
                     ? 'check_circle'
                     : alert.type === 'warning'
-                    ? 'warning'
-                    : 'info'}
+                      ? 'warning'
+                      : 'info'}
                 </span>
                 <div className="flex-1">
                   <p className="font-bold text-slate-900 dark:text-white text-sm">{alert.message}</p>

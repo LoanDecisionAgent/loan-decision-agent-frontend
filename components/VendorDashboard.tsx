@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '../lib/user-context';
+import { getDashboardStats } from '../lib/api';
 
 interface StatCardProps {
   title: string;
@@ -35,23 +36,28 @@ const VendorDashboard: React.FC = () => {
     totalRequests: 0,
     approved: 0,
     rejected: 0,
-    pending: 0,
+    avgLatency: 0,
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading stats
-    const timer = setTimeout(() => {
-      setStats({
-        totalRequests: 1247,
-        approved: 892,
-        rejected: 298,
-        pending: 57,
-      });
-      setLoading(false);
-    }, 800);
+    async function loadStats() {
+      try {
+        const dashboardStats = await getDashboardStats().catch(() => ({ totalRequests: 0, approved: 0, rejected: 0, avgLatencyMs: 0 }));
 
-    return () => clearTimeout(timer);
+        setStats({
+          totalRequests: dashboardStats?.totalRequests || 0,
+          approved: dashboardStats?.approved || 0,
+          rejected: dashboardStats?.rejected || 0,
+          avgLatency: dashboardStats?.avgLatencyMs || 0
+        });
+      } catch (error) {
+        console.error('Failed to load stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadStats();
   }, []);
 
   const recentActivity = [
@@ -113,10 +119,10 @@ const VendorDashboard: React.FC = () => {
           color="bg-gradient-to-br from-red-600 to-red-700"
         />
         <StatCard
-          title="Pending Review"
-          value={stats.pending.toLocaleString()}
-          icon="schedule"
-          color="bg-gradient-to-br from-yellow-600 to-yellow-700"
+          title="Avg. Latency"
+          value={`${stats.avgLatency}ms`}
+          icon="speed"
+          color="bg-gradient-to-br from-blue-600 to-blue-700"
         />
       </div>
 
@@ -179,28 +185,26 @@ const VendorDashboard: React.FC = () => {
                 className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl"
               >
                 <div
-                  className={`p-2 rounded-lg ${
-                    activity.status === 'success'
-                      ? 'bg-green-100 dark:bg-green-950/30'
-                      : activity.status === 'warning'
+                  className={`p-2 rounded-lg ${activity.status === 'success'
+                    ? 'bg-green-100 dark:bg-green-950/30'
+                    : activity.status === 'warning'
                       ? 'bg-yellow-100 dark:bg-yellow-950/30'
                       : 'bg-red-100 dark:bg-red-950/30'
-                  }`}
+                    }`}
                 >
                   <span
-                    className={`material-symbols-outlined text-[18px] ${
-                      activity.status === 'success'
-                        ? 'text-green-600 dark:text-green-400'
-                        : activity.status === 'warning'
+                    className={`material-symbols-outlined text-[18px] ${activity.status === 'success'
+                      ? 'text-green-600 dark:text-green-400'
+                      : activity.status === 'warning'
                         ? 'text-yellow-600 dark:text-yellow-400'
                         : 'text-red-600 dark:text-red-400'
-                    }`}
+                      }`}
                   >
                     {activity.status === 'success'
                       ? 'check_circle'
                       : activity.status === 'warning'
-                      ? 'schedule'
-                      : 'cancel'}
+                        ? 'schedule'
+                        : 'cancel'}
                   </span>
                 </div>
                 <div className="flex-1">

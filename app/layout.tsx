@@ -1,6 +1,7 @@
-
 import '../globals.css';
 import { UserProvider } from '../lib/user-context';
+import { I18nProvider } from '../lib/i18n';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-white dark:bg-slate-950 font-display transition-colors duration-200 selection:bg-indigo-100 dark:selection:bg-indigo-900/40">
         <UserProvider>
-          {children}
+          <I18nProvider>
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+          </I18nProvider>
         </UserProvider>
       </body>
     </html>

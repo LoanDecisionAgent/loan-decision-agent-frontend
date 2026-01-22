@@ -127,7 +127,7 @@ export default function RequestLogs() {
           <div className="flex items-center justify-center py-12">
             <span className="spinner w-8 h-8"></span>
           </div>
-        ) : logs.length === 0 ? (
+        ) : (Array.isArray(logs) ? logs : []).length === 0 ? (
           <div className="text-center py-12">
             <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-700 mb-4">inbox</span>
             <p className="text-slate-500 dark:text-slate-400">No request logs found</p>
@@ -147,7 +147,7 @@ export default function RequestLogs() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {logs.map((log) => (
+                  {(Array.isArray(logs) ? logs : []).map((log) => (
                     <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                       <td className="py-4 px-6 text-sm text-slate-600 dark:text-slate-400 font-mono">
                         {formatDate(log.timestamp)}

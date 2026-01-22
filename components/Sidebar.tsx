@@ -5,6 +5,8 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { User, UserRole } from '../types';
+import { useI18n } from '../lib/i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface SidebarProps {
   user: User;
@@ -16,22 +18,24 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, isOpen, onClose }) => {
   const isAdmin = user.role === UserRole.ADMIN;
   const pathname = usePathname();
+  const { t } = useI18n();
 
   const navItems = [
-    { label: 'Dashboard', icon: 'dashboard', path: '/dashboard' },
-    ...(isAdmin 
+    { label: t('dashboard'), icon: 'dashboard', path: '/dashboard' },
+    ...(isAdmin
       ? [
-          { label: 'Vendors', icon: 'group', path: '/dashboard/vendors' },
-          { label: 'Audit Logs', icon: 'history', path: '/dashboard/audit-logs' },
-          { label: 'API Keys', icon: 'vpn_key', path: '/dashboard/api-keys' },
-        ]
+        { label: t('vendors'), icon: 'group', path: '/dashboard/vendors' },
+        { label: t('auditLogs'), icon: 'history', path: '/dashboard/audit-logs' },
+        { label: t('apiKeys'), icon: 'vpn_key', path: '/dashboard/api-keys' },
+      ]
       : [
-          { label: 'Batch Processing', icon: 'upload_file', path: '/dashboard/batch-upload' },
-          { label: 'Request Logs', icon: 'history', path: '/dashboard/request-logs' },
-          { label: 'Feedback', icon: 'feedback', path: '/dashboard/feedback' },
-        ]
+        { label: 'Batch Processing', icon: 'upload_file', path: '/dashboard/batch-upload' },
+        { label: 'Request Logs', icon: 'history', path: '/dashboard/request-logs' },
+        { label: 'Feedback', icon: 'feedback', path: '/dashboard/feedback' },
+      ]
     ),
-    { label: 'Documentation', icon: 'description', path: '/dashboard/docs' },
+    { label: t('profile'), icon: 'person', path: '/dashboard/profile' },
+    { label: t('docs'), icon: 'description', path: '/dashboard/docs' },
   ];
 
   return (
@@ -65,11 +69,10 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, isOpen, onClose }) =>
                   key={item.path}
                   href={item.path}
                   onClick={onClose}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
-                    isActive 
-                      ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400 font-semibold' 
-                      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600'
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${isActive
+                    ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400 font-semibold'
+                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600'
+                    }`}
                 >
                   <span className="material-symbols-outlined text-[22px]">{item.icon}</span>
                   <span className="text-sm">{item.label}</span>
@@ -80,6 +83,8 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, isOpen, onClose }) =>
         </div>
 
         <div className="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+          <LanguageSwitcher />
+
           <div className="flex items-center gap-3 px-2">
             <img src={user.avatar} alt="Profile" className="h-10 w-10 rounded-full object-cover" />
             <div className="flex flex-col overflow-hidden">
@@ -88,7 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, isOpen, onClose }) =>
             </div>
           </div>
           <button onClick={onLogout} className="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-red-600 text-sm font-medium">
-            <span className="material-symbols-outlined text-[20px]">logout</span> Log Out
+            <span className="material-symbols-outlined text-[20px]">logout</span> {t('signOut')}
           </button>
         </div>
       </div>

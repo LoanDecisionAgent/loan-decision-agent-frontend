@@ -7,6 +7,8 @@ import { useUser } from '../../lib/user-context';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 
+import ErrorBoundary from '../../components/ErrorBoundary';
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, logout, toggleDarkMode, isDarkMode } = useUser();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,11 +27,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       )}
 
       <Sidebar user={user} onLogout={logout} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      
+
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <Header user={user} toggleDarkMode={toggleDarkMode} onMenuClick={() => setIsSidebarOpen(true)} isDarkMode={isDarkMode} />
-        <div className="flex-1 overflow-y-auto custom-scrollbar">
-          {children}
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
         </div>
       </main>
     </div>

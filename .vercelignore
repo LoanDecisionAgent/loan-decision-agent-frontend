@@ -1,0 +1,25 @@
+# Docker files (not needed for Vercel)
+Dockerfile
+docker-compose.yml
+docker-compose.dev.yml
+docker-build.sh
+.dockerignore
+nginx.conf
+DOCKER.md
+
+# Documentation (optional - can be included)
+# BACKEND_INTEGRATION_GUIDE.md
+# BACKEND_QUICK_REFERENCE.md
+# CODEBASE_STATUS.md
+# docs/
+
+# Test files
+__tests__/
+jest.config.js
+jest.setup.js
+*.test.tsx
+*.test.ts
+
+# Development files
+.env.local
+.env*.local

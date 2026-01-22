@@ -38,23 +38,23 @@ export interface AuditLog {
 }
 
 export interface ScoreRequest {
-  age: number;
+  applicant_id: string;
+  requested_amount: number;
+  requested_term_months: number;
   income: number;
-  loanamount: number;
-  interestrate: number;
-  loanterm: number;
-  dtiratio: number;
-  employmenttype: string;
-  maritalstatus: string;
-  loanpurpose: string;
-  hasdependents: number;
+  monthly_expenses: number;
+  existing_debt: number;
+  credit_score: number;
+  employment_status: 'EMPLOYED' | 'SELF_EMPLOYED' | 'UNEMPLOYED';
+  employment_duration_months: number;
+  age: number;
 }
 
 export interface ScoreResponse {
-  default_probability: number;
-  risk_band: string;
-  model_decision: string;
-  top_factors: string[];
+  decision: 'APPROVE' | 'REJECT';
+  probability: number;
+  risk_band: 'LOW' | 'MEDIUM' | 'HIGH';
+  application_id: string;
 }
 
 export interface ApiError {
@@ -84,16 +84,44 @@ export interface ApiKey {
 }
 
 export interface Feedback {
-  id: string;
+  id?: string; // Optional in cheat sheet response payload isn't fully defined but keeping id
   applicationId: string;
-  rating: number;
-  comment: string;
-  submittedAt: string;
-  submittedBy: string;
+  outcomeType: 'REPAID' | 'DEFAULTED' | 'ONGOING' | 'CANCELLED';
+  outcomeDate: string;
+  amountRecovered?: number;
+  notes?: string;
+  // keeping submittedAt/By just in case, but making optional or removing if strict
+  submittedAt?: string;
+  submittedBy?: string;
+}
+
+export interface FeedbackRequest {
+  applicationId: string;
+  outcomeType: 'REPAID' | 'DEFAULTED' | 'ONGOING' | 'CANCELLED';
+  outcomeDate: string;
+  amountRecovered?: number;
+  notes?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  role: UserRole; // 'VENDOR' or 'ADMIN'
+}
+
+export interface AuthResponse {
+  access_token: string;
+  user: User;
 }
 
 export interface BatchJob {
   id: string;
+  jobId?: string;
   filename?: string;
   status: JobStatus;
   totalRecords: number;

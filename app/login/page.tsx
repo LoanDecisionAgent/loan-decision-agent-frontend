@@ -15,26 +15,35 @@ export default function LoginPage() {
   const { login } = useUser();
   const router = useRouter();
 
-  const handleAuth = (role: UserRole) => {
-    login(role);
-    router.push('/dashboard');
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setLoading(true);
+    setError('');
+
     // Basic validation
     if (!email || !password) {
+      setLoading(false);
       return;
     }
-    
+
     if (!validateEmail(email)) {
-      // Email validation is handled by HTML5, but we can add custom message if needed
+      setLoading(false);
       return;
     }
-    
-    const role = email.toLowerCase().includes('admin') ? UserRole.ADMIN : UserRole.VENDOR;
-    handleAuth(role);
+
+    try {
+      await login(email, password);
+      router.push('/dashboard');
+    } catch (err: any) {
+      console.error('Login error:', err);
+      const message = err.message || 'Invalid email or password';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,11 +60,19 @@ export default function LoginPage() {
         <div className="w-full rounded-3xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
           <div className="p-10">
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              {error && (
+                <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-xl p-4 animate-fade-in">
+                  <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">error</span>
+                    {error}
+                  </p>
+                </div>
+              )}
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase tracking-widest text-slate-400">Identity / Email</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-slate-400">mail</span>
-                  <input 
+                  <input
                     className="w-full h-14 rounded-2xl border border-slate-200 bg-slate-50 pl-12 pr-4 text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none"
                     type="email" placeholder="name@company.com" required
                     value={email} onChange={(e) => setEmail(e.target.value)}
@@ -67,7 +84,7 @@ export default function LoginPage() {
                 <label className="text-xs font-black uppercase tracking-widest text-slate-400">Secret Key</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-slate-400">lock</span>
-                  <input 
+                  <input
                     className="w-full h-14 rounded-2xl border border-slate-200 bg-slate-50 pl-12 pr-12 text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 transition-all outline-none"
                     type={showPassword ? 'text' : 'password'} placeholder="••••••••" required
                     value={password} onChange={(e) => setPassword(e.target.value)}
@@ -83,7 +100,7 @@ export default function LoginPage() {
               </button>
             </form>
           </div>
-          
+
           <div className="bg-slate-50 dark:bg-slate-800/30 px-10 py-6 border-t border-slate-100 dark:border-slate-800 text-center">
             <p className="text-sm text-slate-500 font-medium">
               New partner? <Link href="/signup" className="font-black text-indigo-600 hover:underline">Get Access</Link>

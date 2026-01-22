@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { getAuditLogs, ApiClientError } from '../lib/api';
 import { handleError } from '../lib/error-handler';
 import { AuditLog } from '../types';
+import LoadingState from '../components/LoadingState';
+import PageTransition from '../components/PageTransition';
 
 export default function AuditLogs() {
   const [logs, setLogs] = useState<AuditLog[]>([]);
@@ -27,8 +29,8 @@ export default function AuditLogs() {
         offset: (page - 1) * limit,
         actor: filter.actor || undefined,
       });
-      setLogs(result.logs);
-      setTotal(result.total);
+      setLogs(result.logs || []);
+      setTotal(result.total || 0);
     } catch (err) {
       const errorInfo = handleError(err);
       setError(errorInfo.userMessage);
@@ -50,7 +52,7 @@ export default function AuditLogs() {
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-8 animate-fade-in">
+    <PageTransition className="p-6 lg:p-8 space-y-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
@@ -105,10 +107,8 @@ export default function AuditLogs() {
       {/* Logs Table */}
       <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden">
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <span className="spinner w-8 h-8"></span>
-          </div>
-        ) : logs.length === 0 ? (
+          <LoadingState message="Loading audit logs..." />
+        ) : (Array.isArray(logs) ? logs : []).length === 0 ? (
           <div className="text-center py-12">
             <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-700 mb-4">inbox</span>
             <p className="text-slate-500 dark:text-slate-400">No audit logs found</p>
@@ -127,7 +127,7 @@ export default function AuditLogs() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {logs.map((log) => (
+                  {(Array.isArray(logs) ? logs : []).map((log) => (
                     <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                       <td className="py-4 px-6 text-sm text-slate-600 dark:text-slate-400 font-mono">
                         {formatDate(log.timestamp)}
@@ -186,6 +186,6 @@ export default function AuditLogs() {
           </>
         )}
       </div>
-    </div>
+    </PageTransition>
   );
 }

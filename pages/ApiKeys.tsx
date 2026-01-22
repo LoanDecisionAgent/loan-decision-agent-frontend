@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { getApiKeys, createApiKey, revokeApiKey, deleteApiKey, ApiClientError } from '../lib/api';
 import { handleError } from '../lib/error-handler';
 import { ApiKey } from '../types';
+import LoadingState from '../components/LoadingState';
+import PageTransition from '../components/PageTransition';
 
 export default function ApiKeys() {
   const [keys, setKeys] = useState<ApiKey[]>([]);
@@ -90,7 +92,7 @@ export default function ApiKeys() {
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-8 animate-fade-in">
+    <PageTransition className="p-6 lg:p-8 space-y-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
@@ -131,10 +133,8 @@ export default function ApiKeys() {
 
       {/* Keys List */}
       {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <span className="spinner w-8 h-8"></span>
-        </div>
-      ) : keys.length === 0 ? (
+        <LoadingState message="Loading API keys..." />
+      ) : (Array.isArray(keys) ? keys : []).length === 0 ? (
         <div className="text-center py-12 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl">
           <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-700 mb-4">vpn_key</span>
           <p className="text-slate-500 dark:text-slate-400 mb-4">No API keys found</p>
@@ -147,7 +147,7 @@ export default function ApiKeys() {
         </div>
       ) : (
         <div className="space-y-4">
-          {keys.map((key) => (
+          {(Array.isArray(keys) ? keys : []).map((key) => (
             <div
               key={key.id}
               className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-800/50 hover-lift animate-fade-in"
@@ -156,12 +156,11 @@ export default function ApiKeys() {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-black text-slate-900 dark:text-white text-lg">{key.name}</h3>
-                    <span className={`px-2 py-1 rounded-lg text-xs font-bold ${
-                      key.status === 'active'
-                        ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
-                        : 'bg-red-500/10 text-red-500 border border-red-500/20'
-                    }`}>
-                      {key.status.toUpperCase()}
+                    <span className={`px-2 py-1 rounded-lg text-xs font-bold ${key.status === 'active'
+                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                      : 'bg-red-500/10 text-red-500 border border-red-500/20'
+                      }`}>
+                      {key.status?.toUpperCase() || 'UNKNOWN'}
                     </span>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
@@ -205,13 +204,13 @@ export default function ApiKeys() {
                 </div>
               </div>
 
-              {key.permissions.length > 0 && (
+              {(Array.isArray(key.permissions) ? key.permissions : []).length > 0 && (
                 <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
                   <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">
                     Permissions
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {key.permissions.map((perm) => (
+                    {(Array.isArray(key.permissions) ? key.permissions : []).map((perm) => (
                       <span
                         key={perm}
                         className="px-2 py-1 rounded-lg text-xs font-bold bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400"
@@ -322,6 +321,6 @@ export default function ApiKeys() {
           </div>
         </div>
       )}
-    </div>
+    </PageTransition>
   );
 }
